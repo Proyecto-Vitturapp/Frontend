@@ -1,6 +1,8 @@
 import { useState, useCallback, useRef } from 'react'
 import { ToastContext } from '../../context/ToastContext'
 
+export { useToast } from '../../context/ToastContext'
+
 let toastId = 0
 
 export function ToastProvider({ children }) {
