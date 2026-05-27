@@ -62,7 +62,7 @@ export default function DashboardLayout() {
                 </svg>
               </div>
               <div>
-                <h1 className="font-bold text-secondary-900">ViTturApp</h1>
+                <h1 className="font-bold text-secondary-900">VitturApp</h1>
                 <p className="text-xs text-secondary-500 capitalize">{user?.role === 'mechanic' ? 'Taller' : 'Cliente'}</p>
               </div>
             </div>
@@ -122,7 +122,7 @@ export default function DashboardLayout() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <h2 className="text-lg font-semibold text-secondary-900 lg:hidden">ViTturApp</h2>
+            <h2 className="text-lg font-semibold text-secondary-900 lg:hidden">VitturApp</h2>
             <div className="hidden lg:block" />
           </div>
         </header>
