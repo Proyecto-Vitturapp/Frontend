@@ -63,7 +63,7 @@ export default function DashboardLayout() {
               </div>
               <div>
                 <h1 className="font-bold text-secondary-900">VitturApp</h1>
-                <p className="text-xs text-secondary-500 capitalize">{user?.role === 'mechanic' ? 'Taller' : 'Cliente'}</p>
+                <p className="text-xs text-secondary-500 capitalize">{isMechanic ? 'Taller' : 'Cliente'}</p>
               </div>
             </div>
           </div>
@@ -90,11 +90,11 @@ export default function DashboardLayout() {
             <div className="flex items-center gap-3 px-3 py-2 mb-2">
               <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                 <span className="text-sm font-medium text-primary-700">
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                  {user?.name?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || 'U'}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-secondary-900 truncate">{user?.name || 'Usuario'}</p>
+                <p className="text-sm font-medium text-secondary-900 truncate">{user?.name || user?.username || 'Usuario'}</p>
                 <p className="text-xs text-secondary-500 truncate">{user?.email || ''}</p>
               </div>
             </div>

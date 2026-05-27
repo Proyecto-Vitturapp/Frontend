@@ -2,7 +2,15 @@ import { useAuth } from '../context/AuthContext'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui'
 
 export default function DashboardHome() {
-  const { user, isMechanic } = useAuth()
+  const { user, isMechanic, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-secondary-500">Cargando...</div>
+      </div>
+    )
+  }
 
   const stats = isMechanic
     ? [
@@ -46,7 +54,7 @@ export default function DashboardHome() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-secondary-900">
-          Bienvenido, {user?.name || 'Usuario'}
+          Bienvenido, {user?.name || user?.username || 'Usuario'}
         </h1>
         <p className="text-secondary-500 mt-1">
           {isMechanic ? 'Panel de gestion del taller' : 'Panel de cliente'}

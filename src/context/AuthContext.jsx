@@ -1,16 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useMemo } from 'react'
+import { createContext, useContext, useState, useMemo, useEffect, useCallback } from 'react'
 import { api } from '../services/api'
 
 const AuthContext = createContext()
 
-function getInitialUser() {
-  const token = localStorage.getItem('token')
-  const storedUser = localStorage.getItem('user')
-  if (token && storedUser) {
-    return JSON.parse(storedUser)
-  }
-  return null
+function getInitialUserId() {
+  return localStorage.getItem('userId')
 }
 
 export function useAuth() {
@@ -22,20 +17,53 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(getInitialUser)
-  const [loading] = useState(false)
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const userId = getInitialUserId()
+
+  const fetchUser = useCallback(async (id) => {
+    try {
+      const data = await api.users.getById(id)
+      setUser({
+        id: data.idUsuario,
+        username: data.username,
+        name: `${data.nombre} ${data.apellido}${data.segundoApellido ? ' ' + data.segundoApellido : ''}`.trim(),
+        email: data.email,
+        role: data.rol,
+        telefono: data.telefono,
+        fechaCreacion: data.fechaCreacion,
+      })
+    } catch (error) {
+      setUser(null)
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    const storedUserId = localStorage.getItem('userId')
+    if (token && storedUserId) {
+      fetchUser(storedUserId)
+    } else {
+      setLoading(false)
+    }
+  }, [fetchUser])
 
   const login = async (username, password) => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
     const data = await api.auth.login({ username, password })
     localStorage.setItem('token', data.token)
-    localStorage.setItem('user', JSON.stringify({ username: data.username, role: data.role }))
-    setUser({ username: data.username, role: data.role })
+    localStorage.setItem('userId', data.userId)
+    await fetchUser(data.userId)
     return data
   }
 
   const logout = () => {
     localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    localStorage.removeItem('userId')
     setUser(null)
   }
 

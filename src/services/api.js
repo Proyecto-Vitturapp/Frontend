@@ -1,4 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_SECRET_KEY = import.meta.env.VITE_API_SECRET_KEY || ''
 
 async function request(endpoint, options = {}) {
   const baseUrl = API_URL.replace(/\/+$/, '')
@@ -8,7 +9,8 @@ async function request(endpoint, options = {}) {
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      'X-API-Key': API_SECRET_KEY,
+      Authorization: `Bearer ${token || API_SECRET_KEY}`,
       ...options.headers,
     },
     ...options,
@@ -48,7 +50,7 @@ export const api = {
     delete: (carId, visitId) => request(`/cars/${carId}/visits/${visitId}`, { method: 'DELETE' }),
   },
   users: {
-    getProfile: () => request('/users/profile'),
+    getById: (id) => request(`/usuarios/${id}`),
     updateProfile: (data) => request('/users/profile', { method: 'PUT', body: data }),
   },
 }
