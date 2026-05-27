@@ -42,7 +42,7 @@ export default function Login() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Iniciar Sesion</CardTitle>
+            <CardTitle>Iniciar sesión</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -51,26 +51,26 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="tu@email.com"
+                placeholder="Tu correo electrónico"
                 required
               />
               <Input
-                label="Contrasena"
+                label="Contraseña"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Tu contrasena"
+                placeholder="Tu contraseña"
                 required
               />
               <Button type="submit" variant="primary" size="lg" disabled={loading} className="w-full">
-                {loading ? 'Iniciando sesion...' : 'Iniciar Sesion'}
+                {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
             </form>
           </CardContent>
         </Card>
 
         <p className="text-center text-primary-100 text-sm mt-6">
-          Proyecto de clase - Demo
+          ¿Problemas para iniciar sesión? ¡Te ayudamos a restablecerla!
         </p>
       </div>
     </div>
