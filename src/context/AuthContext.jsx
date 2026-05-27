@@ -1,12 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useMemo, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { api } from '../services/api'
 
 const AuthContext = createContext()
-
-function getInitialUserId() {
-  return localStorage.getItem('userId')
-}
 
 export function useAuth() {
   const context = useContext(AuthContext)
@@ -18,8 +14,10 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const userId = getInitialUserId()
+  const [loading, setLoading] = useState(() => {
+    return !!(localStorage.getItem('token') && localStorage.getItem('userId'))
+  })
+  const initialized = useRef(false)
 
   const fetchUser = useCallback(async (id) => {
     try {
@@ -30,8 +28,8 @@ export function AuthProvider({ children }) {
         name: `${data.nombre} ${data.apellido}${data.segundoApellido ? ' ' + data.segundoApellido : ''}`.trim(),
         email: data.email,
         role: data.rol,
-        phoneNumber: data.phoneNumber,
-        creationDate: data.creationDate,
+        telefono: data.telefono,
+        fechaCreacion: data.fechaCreacion,
       })
     } catch (error) {
       setUser(null)
@@ -42,12 +40,13 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
+    if (initialized.current) return
+    initialized.current = true
+
     const token = localStorage.getItem('token')
     const storedUserId = localStorage.getItem('userId')
     if (token && storedUserId) {
-      fetchUser(storedUserId)
-    } else {
-      setLoading(false)
+      Promise.resolve().then(() => fetchUser(storedUserId))
     }
   }, [fetchUser])
 
