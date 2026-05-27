@@ -30,8 +30,8 @@ export function AuthProvider({ children }) {
         name: `${data.nombre} ${data.apellido}${data.segundoApellido ? ' ' + data.segundoApellido : ''}`.trim(),
         email: data.email,
         role: data.rol,
-        telefono: data.telefono,
-        fechaCreacion: data.fechaCreacion,
+        phoneNumber: data.phoneNumber,
+        creationDate: data.creationDate,
       })
     } catch (error) {
       setUser(null)
@@ -52,8 +52,6 @@ export function AuthProvider({ children }) {
   }, [fetchUser])
 
   const login = async (username, password) => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
     const data = await api.auth.login({ username, password })
     localStorage.setItem('token', data.token)
     localStorage.setItem('userId', data.userId)
