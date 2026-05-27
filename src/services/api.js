@@ -1,7 +1,8 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
 async function request(endpoint, options = {}) {
-  const url = `${API_URL}${endpoint}`
+  const baseUrl = API_URL.replace(/\/+$/, '')
+  const url = `${baseUrl}${endpoint}`
   const token = localStorage.getItem('token')
 
   const config = {
@@ -29,7 +30,7 @@ async function request(endpoint, options = {}) {
 
 export const api = {
   auth: {
-    login: (credentials) => request('/auth/login', { method: 'POST', body: credentials }),
+    login: (credentials) => request('/login', { method: 'POST', body: credentials }),
     register: (data) => request('/auth/register', { method: 'POST', body: data }),
   },
   cars: {

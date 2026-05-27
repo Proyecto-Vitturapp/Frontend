@@ -25,12 +25,12 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(getInitialUser)
   const [loading] = useState(false)
 
-  const login = async (email, password) => {
-    const data = await api.auth.login({ email, password })
+  const login = async (username, password) => {
+    const data = await api.auth.login({ username, password })
     localStorage.setItem('token', data.token)
-    localStorage.setItem('user', JSON.stringify(data.user))
-    setUser(data.user)
-    return data.user
+    localStorage.setItem('user', JSON.stringify({ username: data.username, role: data.role }))
+    setUser({ username: data.username, role: data.role })
+    return data
   }
 
   const logout = () => {
@@ -43,8 +43,8 @@ export function AuthProvider({ children }) {
     user,
     login,
     logout,
-    isMechanic: user?.role === 'mechanic',
-    isClient: user?.role === 'client',
+    isClient: user?.role === 0,
+    isMechanic: user?.role === 1,
     loading,
   }), [user, loading])
 

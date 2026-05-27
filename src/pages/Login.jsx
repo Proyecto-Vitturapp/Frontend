@@ -5,7 +5,7 @@ import { useToast } from '../components/ui'
 import { Input, Button, Card, CardContent, CardHeader, CardTitle } from '../components/ui'
 
 export default function Login() {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
@@ -16,11 +16,11 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     try {
-      await login(email, password)
-      addToast('Sesion iniciada correctamente', 'success')
+      await login(username, password)
+      addToast('Has iniciado sesión correctamente', 'success')
       navigate('/dashboard')
     } catch (error) {
-      addToast(error.message || 'Error al iniciar sesion', 'error')
+      addToast(error.message || 'Error al iniciar sesión', 'error')
     } finally {
       setLoading(false)
     }
@@ -47,11 +47,11 @@ export default function Login() {
           <CardContent>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <Input
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Tu correo electrónico"
+                label="Usuario"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Tu nombre de usuario"
                 required
               />
               <Input
