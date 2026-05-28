@@ -3,7 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './components/ui'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
-import DashboardLayout from './components/layout/DashboardLayout'
+import Sidebar from './components/Sidebar'
 import DashboardHome from './pages/DashboardHome'
 import VehicleList from './pages/VehicleList'
 import VehicleDetail from './pages/VehicleDetail'
@@ -21,7 +21,7 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <DashboardLayout />
+                  <Sidebar />
                 </ProtectedRoute>
               }
             >
