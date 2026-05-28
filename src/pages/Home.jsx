@@ -1,63 +1,63 @@
-import { useAuth } from '../context/AuthContext'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui'
+import { useAuth } from "../context/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui";
+import { CarFront, Users, Wrench, Pencil, ClipboardClock } from 'lucide-react';
 
 export default function Home() {
-  const { user, isMechanic, loading } = useAuth()
+  const { user, isMechanic, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-secondary-500">Cargando...</div>
       </div>
-    )
+    );
   }
-
-  const stats = isMechanic
-    ? [
-        { label: 'Vehiculos en taller', value: '--', icon: 'car' },
-        { label: 'Revisiones este mes', value: '--', icon: 'calendar' },
-        { label: 'Clientes activos', value: '--', icon: 'users' },
-      ]
-    : [
-        { label: 'Mis vehiculos', value: '--', icon: 'car' },
-        { label: 'Ultima revision', value: '--', icon: 'calendar' },
-        { label: 'Proxima revision', value: '--', icon: 'clock' },
-      ]
 
   const renderIcon = (icon) => {
     const icons = {
-      car: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h8m-8 4h8m-4 4v-4m-6 8h12a2 2 0 002-2V9a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-        </svg>
+      Car: (
+        <CarFront className="w-6 h-6" />
       ),
-      calendar: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
+      Wrench: (
+        <Wrench className="w-6 h-6" />
       ),
-      users: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
+      Pencil: (
+        <Pencil className="w-6 h-6" />
       ),
-      clock: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+      Users: (
+        <Users className="w-6 h-6" />
       ),
-    }
-    return icons[icon]
-  }
+      ClipboardClock: (
+        <ClipboardClock className="w-6 h-6" />
+      ) 
+    };
+    return icons[icon];
+  };
+
+  const stats = isMechanic
+    ? [
+        { label: "Vehículos registrados", value: "--", icon: "Car" },
+        { label: "Vehículos en taller", value: "--", icon: "Wrench" },
+        { label: "Revisiones realizadas", value: "--", icon: "Pencil" },
+        { label: "Clientes registrados", value: "--", icon: "Users" },
+      ]
+    : [
+        { label: "Vehículos en propiedad", value: "--", icon: "Car" },
+        { label: "Ultima revision", value: "--", icon: "Wrench" },
+        { label: "Proxima revisión", value: "--", icon: "ClipboardClock" },
+      ];
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-secondary-900">
-          Bienvenido, {user?.name || user?.username || 'Usuario'}
+          Bienvenido, {user?.name || user?.username || "Usuario"}
         </h1>
         <p className="text-secondary-500 mt-1">
-          Desde este panel podrás tener un control sobre {isMechanic ? 'todos los vehículos del taller' : 'tus vehículos que traes a este taller'}
+          Desde este panel podrás tener un control sobre{" "}
+          {isMechanic
+            ? "todos los vehículos del taller"
+            : "tus vehículos que traes a este taller"}
         </p>
       </div>
 
@@ -69,7 +69,9 @@ export default function Home() {
                 {renderIcon(stat.icon)}
               </div>
               <div>
-                <p className="text-2xl font-bold text-secondary-900">{stat.value}</p>
+                <p className="text-2xl font-bold text-secondary-900">
+                  {stat.value}
+                </p>
                 <p className="text-sm text-secondary-500">{stat.label}</p>
               </div>
             </CardContent>
@@ -88,5 +90,5 @@ export default function Home() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
