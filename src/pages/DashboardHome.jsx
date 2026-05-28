@@ -57,7 +57,7 @@ export default function DashboardHome() {
           Bienvenido, {user?.name || user?.username || 'Usuario'}
         </h1>
         <p className="text-secondary-500 mt-1">
-          {isMechanic ? 'Panel de gestion del taller' : 'Panel de cliente'}
+          Desde este panel podrás tener un control sobre {isMechanic ? 'todos los vehículos del taller' : 'tus vehículos que traes a este taller'}
         </p>
       </div>
 
