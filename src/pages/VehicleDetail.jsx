@@ -140,15 +140,15 @@ export default function VehicleDetail() {
                 <dd className="text-sm font-medium text-secondary-900">{vehicle.modelo}</dd>
               </div>
               <div>
-                <dt className="text-sm text-secondary-500">Matricula</dt>
+                <dt className="text-sm text-secondary-500">Matrícula</dt>
                 <dd className="text-sm font-medium text-secondary-900">{vehicle.matricula}</dd>
               </div>
               <div>
-                <dt className="text-sm text-secondary-500">Ano fabricacion</dt>
+                <dt className="text-sm text-secondary-500">Año de fabricación</dt>
                 <dd className="text-sm font-medium text-secondary-900">{vehicle.anyoFabricacion}</dd>
               </div>
               <div>
-                <dt className="text-sm text-secondary-500">Tipo</dt>
+                <dt className="text-sm text-secondary-500">Tipo de vehículo</dt>
                 <dd className="text-sm font-medium text-secondary-900">{vehicle.tipoVehiculo}</dd>
               </div>
             </dl>

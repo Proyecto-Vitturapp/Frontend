@@ -28,9 +28,9 @@ export default function VehicleList() {
   const columns = [
     { key: 'marca', label: 'Marca' },
     { key: 'modelo', label: 'Modelo' },
-    { key: 'matricula', label: 'Matricula' },
-    { key: 'anyoFabricacion', label: 'Ano' },
-    { key: 'tipoVehiculo', label: 'Tipo' },
+    { key: 'matricula', label: 'Matrícula' },
+    { key: 'anyoFabricacion', label: 'Año de fabricación' },
+    { key: 'tipoVehiculo', label: 'Tipo de vehículo' },
   ]
 
   if (loading) {
