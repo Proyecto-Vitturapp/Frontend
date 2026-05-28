@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui'
 
-export default function DashboardHome() {
+export default function Home() {
   const { user, isMechanic, loading } = useAuth()
 
   if (loading) {

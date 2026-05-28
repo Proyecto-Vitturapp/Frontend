@@ -4,7 +4,7 @@ import { ToastProvider } from './components/ui'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Sidebar from './components/Sidebar'
-import DashboardHome from './pages/DashboardHome'
+import Home from './pages/Home'
 import VehicleList from './pages/VehicleList'
 import VehicleDetail from './pages/VehicleDetail'
 import NewVehicle from './pages/NewVehicle'
@@ -25,7 +25,7 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route index element={<DashboardHome />} />
+              <Route index element={<Home />} />
               <Route path="vehicles" element={<VehicleList />} />
               <Route path="vehicles/:plate" element={<VehicleDetail />} />
               <Route
