@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Input, Textarea, Button, Select } from '../components/ui'
+import { Undo2 } from 'lucide-react'
 
 export default function NewRevision() {
   const { plate } = useParams()
@@ -57,13 +58,11 @@ export default function NewRevision() {
           onClick={() => navigate(`/dashboard/vehicles/${plate}`)}
           className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver al vehiculo
+          <Undo2 className="w-4 h-4 mr-2" />
+          Volver a los detalles del vehículo
         </button>
-        <h1 className="text-2xl font-bold text-secondary-900">Nueva Revision</h1>
-        <p className="text-secondary-500 mt-1">Registrar una nueva revision para el vehiculo</p>
+        <h1 className="text-2xl font-bold text-secondary-900">Nueva revisión</h1>
+        <p className="text-secondary-500 mt-1">Aquí puedes registrar una nueva revisión para el vehículo con matrícula {plate}</p>
       </div>
 
       <Card>
