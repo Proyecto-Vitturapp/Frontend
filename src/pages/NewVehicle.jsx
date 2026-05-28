@@ -24,7 +24,7 @@ export default function NewVehicle() {
     e.preventDefault()
     setLoading(true)
     try {
-      await api.vehicles.create({
+      await api.vehicle.create({
         ...form,
         anyoFabricacion: parseInt(form.anyoFabricacion),
       })

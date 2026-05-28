@@ -6,17 +6,18 @@ import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../components/ui'
 
 export default function VehicleList() {
-  const [vehicles, setVehicles] = useState([])
-  const [loading, setLoading] = useState(true)
   const { user, isMechanic } = useAuth()
+  const [loading, setLoading] = useState(true)
   const { addToast } = useToast()
+  const [vehicles, setVehicles] = useState([])
+  const [workshopVehicles, setWorkshopVehicles] = useState([])
   const navigate = useNavigate()
 
   const loadVehicles = useCallback(async () => {
     try {
       const data = isMechanic
         ? await api.vehicles.getAll()
-        : await api.users.getVehicles(user.id)
+        : await api.vehicles.getAllUserVehicles(user.id)
       setVehicles(data)
     } catch {
       addToast('Error al cargar los vehiculos', 'error')
@@ -25,10 +26,22 @@ export default function VehicleList() {
     }
   }, [isMechanic, user, addToast])
 
+  const loadWorkshopVehicles = useCallback(async () => {
+    try {
+      const data = isMechanic
+        ? await api.vehicles.getInWorkshop()
+        : await api.vehicles.getInWorkshopUserVehicles(user.id)
+      setWorkshopVehicles(data)
+    } catch {
+      addToast('Error al cargar los vehiculos en taller', 'error')
+    }
+  }, [isMechanic, user, addToast])
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadVehicles()
-  }, [loadVehicles])
+    loadWorkshopVehicles()
+  }, [loadVehicles, loadWorkshopVehicles])
 
   const columns = [
     { key: 'marca', label: 'Marca' },
@@ -68,7 +81,22 @@ export default function VehicleList() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {isMechanic ? 'Todos los vehículos' : 'Tus vehículos'}
+            Todos {isMechanic ? 'los' : 'tus'} vehículos en el taller
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table
+            columns={columns}
+            data={workshopVehicles}
+            onRowClick={(vehicle) => navigate(`/dashboard/vehicles/${vehicle.matricula}`)}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Todos {isMechanic ? 'los ' : 'tus'} vehículos registrados
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">

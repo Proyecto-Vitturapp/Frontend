@@ -21,9 +21,9 @@ export default function Home() {
       try {
         const [vehiculosTotal, vehiculosEnTaller, usuariosTotal, revisionesTotal] =
           await Promise.all([
-            api.vehicles.getTotal(),
+            api.vehicles.getAllTotal(),
             api.vehicles.getInWorkshopTotal(),
-            api.users.getTotal(),
+            api.users.getAllTotal(),
             api.revisiones.getTotal(),
           ]);
 
