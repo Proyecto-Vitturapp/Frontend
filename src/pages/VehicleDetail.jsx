@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, ErrorScreen } from '../components/ui'
-import { Undo2 } from 'lucide-react'
+import { Undo2, Plus } from 'lucide-react'
 import { useApiCache } from '../hooks/useApiCache'
 
 export default function VehicleDetail() {
@@ -110,16 +110,13 @@ export default function VehicleDetail() {
           Volver a la lista de vehículos
           </button>
           <h1 className="text-2xl font-bold text-secondary-900">
-            {vehicle.marca} {vehicle.modelo}
+            {vehicle.marca} {vehicle.modelo} ({vehicle.matricula})
           </h1>
-          <p className="text-secondary-500 mt-1">{vehicle.matricula}</p>
         </div>
         {isMechanic && (
           <Button onClick={() => navigate(`/dashboard/vehicles/${plate}/revision/new`)}>
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Nueva Revision
+            <Plus className="w-4 h-4 mr-2" />
+            Nueva revisión
           </Button>
         )}
       </div>
@@ -127,7 +124,7 @@ export default function VehicleDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Informacion del vehiculo</CardTitle>
+            <CardTitle>Información del vehículo</CardTitle>
           </CardHeader>
           <CardContent>
             <dl className="space-y-4">
