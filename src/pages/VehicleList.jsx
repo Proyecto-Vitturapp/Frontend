@@ -50,9 +50,9 @@ export default function VehicleList() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-secondary-900">Vehiculos</h1>
+          <h1 className="text-2xl font-bold text-secondary-900">Vehículos</h1>
           <p className="text-secondary-500 mt-1">
-            {isMechanic ? 'Todos los vehiculos del taller' : 'Mis vehiculos'}
+            Aquí podrás ver todos {isMechanic ? 'los vehículos registrados en el taller' : 'tus vehículos que traes a este taller'}
           </p>
         </div>
         {isMechanic && (
@@ -68,7 +68,7 @@ export default function VehicleList() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {isMechanic ? 'Lista de vehículos' : 'Mis vehículos'}
+            {isMechanic ? 'Todos los vehículos' : 'Tus vehículos'}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
