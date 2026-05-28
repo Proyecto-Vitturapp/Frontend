@@ -12,7 +12,7 @@ export default function Sidebar() {
 
   const navItems = [
     { path: '/dashboard', label: 'Inicio', icon: 'home' },
-    { path: '/dashboard/vehicles', label: 'Vehiculos', icon: 'car' },
+    { path: '/dashboard/vehicles', label: 'Vehículos', icon: 'car' },
   ]
 
   const handleLogout = () => {
