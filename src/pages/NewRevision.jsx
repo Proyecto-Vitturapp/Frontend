@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
-import { Card, CardContent, CardHeader, CardTitle, Input, Textarea, Button, Select } from '../components/ui'
+import { Card, CardContent, CardHeader, CardTitle, Input, Textarea, Button } from '../components/ui'
 import { Undo2 } from 'lucide-react'
 
 export default function NewRevision() {
@@ -42,15 +42,6 @@ export default function NewRevision() {
     }
   }
 
-  const revisionTypes = [
-    { value: 'revision', label: 'Revision' },
-    { value: 'reparacion', label: 'Reparacion' },
-    { value: 'cambio_aceite', label: 'Cambio de aceite' },
-    { value: 'neumaticos', label: 'Neumaticos' },
-    { value: 'frenos', label: 'Frenos' },
-    { value: 'otro', label: 'Otro' },
-  ]
-
   return (
     <div className="space-y-6">
       <div>
@@ -67,11 +58,11 @@ export default function NewRevision() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Datos de la revision</CardTitle>
+          <CardTitle>Detalles de la revisión</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
                 label="Fecha"
                 name="fecha"
@@ -80,44 +71,34 @@ export default function NewRevision() {
                 onChange={handleChange}
                 required
               />
-              <Select
-                label="Tipo de revision"
-                name="tipo"
-                value={form.tipo}
-                onChange={handleChange}
-                options={revisionTypes}
-                required
-              />
-            </div>
-            <Textarea
-              label="Descripcion"
-              name="descripcion"
-              value={form.descripcion}
-              onChange={handleChange}
-              placeholder="Describe lo que se ha hecho en esta revision..."
-              required
-            />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Coste (EUR)"
+                label="Coste"
                 name="coste"
                 type="number"
                 value={form.coste}
                 onChange={handleChange}
-                placeholder="0.00"
+                placeholder="Introduce el coste en euros (€)"
               />
               <Input
-                label="Kilometros actuales"
+                label="Kilómetros actuales"
                 name="km"
                 type="number"
                 value={form.km}
                 onChange={handleChange}
-                placeholder="Km del vehiculo"
+                placeholder="Introduce los kilómetros actuales del vehículo"
               />
             </div>
+            <Textarea
+              label="Descripción"
+              name="descripcion"
+              value={form.descripcion}
+              onChange={handleChange}
+              placeholder="Describe lo que se ha hecho en esta revisión..."
+              required
+            />
             <div className="flex gap-3 pt-4">
               <Button type="submit" variant="primary" disabled={loading}>
-                {loading ? 'Guardando...' : 'Registrar Revision'}
+                {loading ? 'Registrando...' : 'Registrar revisión'}
               </Button>
               <Button type="button" variant="secondary" onClick={() => navigate(`/dashboard/vehicles/${plate}`)}>
                 Cancelar
