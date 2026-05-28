@@ -11,7 +11,6 @@ export default function DashboardLayout() {
   const navItems = [
     { path: '/dashboard', label: 'Inicio', icon: 'home' },
     { path: '/dashboard/vehicles', label: 'Vehiculos', icon: 'car' },
-    ...(isMechanic ? [{ path: '/dashboard/vehicles/new', label: 'Nuevo Vehiculo', icon: 'add' }] : []),
   ]
 
   const handleLogout = () => {
