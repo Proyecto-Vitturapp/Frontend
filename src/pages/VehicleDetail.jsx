@@ -31,7 +31,7 @@ export default function VehicleDetail() {
         api.reviews.getByVehiculo(plate),
       ])
       setVehicle(vehicleData)
-      setReviews(revisionesData)
+      setReviews(Array.isArray(revisionesData) ? revisionesData : revisionesData ? [revisionesData] : [])
     } catch {
       addToast('Error al cargar los datos', 'error')
     } finally {
@@ -165,26 +165,21 @@ export default function VehicleDetail() {
               <div className="space-y-4">
                 {reviews.map((revision) => (
                   <div
-                    key={revision.id}
+                    key={revision.idRevision}
                     className="p-4 border border-secondary-200 rounded-lg hover:border-primary-200 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-secondary-900">
-                        {revision.fecha ? formatDate(revision.fecha) : 'Sin fecha'}
+                        {revision.fechaRevision ? formatDate(revision.fechaRevision) : 'Sin fecha'}
                       </span>
-                      {revision.tipo && (
-                        <Badge variant="primary">{revision.tipo}</Badge>
+                      {revision.kilometrajeActual && (
+                        <Badge variant="primary">{revision.kilometrajeActual.toLocaleString()} km</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-secondary-600">{revision.descripcion}</p>
-                    {revision.mecanico && (
-                      <p className="text-xs text-secondary-400 mt-2">
-                        Mecanico: {revision.mecanico}
-                      </p>
-                    )}
-                    {revision.coste && (
+                    <p className="text-sm text-secondary-600">{revision.diagnosticoResultado}</p>
+                    {revision.importe && (
                       <p className="text-sm font-medium text-primary-600 mt-2">
-                        {revision.coste} EUR
+                        {revision.importe.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
                       </p>
                     )}
                   </div>
