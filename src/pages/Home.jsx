@@ -1,9 +1,50 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui";
-import { CarFront, Users, Wrench, Pencil, ClipboardClock } from 'lucide-react';
+import { CarFront, Users, Wrench, Pencil, ClipboardClock } from "lucide-react";
+import { api } from "../services/api";
 
 export default function Home() {
   const { user, isMechanic, loading } = useAuth();
+  const [statsData, setStatsData] = useState({
+    vehiculosRegistrados: "--",
+    vehiculosEnTaller: "--",
+    revisionesRealizadas: "--",
+    clientesRegistrados: "--",
+    vehiculosEnPropiedad: "--",
+    ultimaRevision: "--",
+    proximaRevision: "--",
+  });
+
+  useEffect(() => {
+    const fetchTotals = async () => {
+      try {
+        const [vehiculosTotal, vehiculosEnTaller, usuariosTotal, revisionesTotal] =
+          await Promise.all([
+            api.vehicles.getTotal(),
+            api.vehicles.getInWorkshopTotal(),
+            api.users.getTotal(),
+            api.revisiones.getTotal(),
+          ]);
+
+        setStatsData({
+          vehiculosRegistrados: vehiculosTotal,
+          vehiculosEnTaller: vehiculosEnTaller,
+          revisionesRealizadas: revisionesTotal,
+          clientesRegistrados: usuariosTotal,
+          vehiculosEnPropiedad: "--",
+          ultimaRevision: "--",
+          proximaRevision: "--",
+        });
+      } catch (error) {
+        console.error("Error fetching totals:", error);
+      }
+    };
+
+    if (!loading) {
+      fetchTotals();
+    }
+  }, [loading]);
 
   if (loading) {
     return (
@@ -15,36 +56,54 @@ export default function Home() {
 
   const renderIcon = (icon) => {
     const icons = {
-      Car: (
-        <CarFront className="w-6 h-6" />
-      ),
-      Wrench: (
-        <Wrench className="w-6 h-6" />
-      ),
-      Pencil: (
-        <Pencil className="w-6 h-6" />
-      ),
-      Users: (
-        <Users className="w-6 h-6" />
-      ),
-      ClipboardClock: (
-        <ClipboardClock className="w-6 h-6" />
-      ) 
+      Car: <CarFront className="w-6 h-6" />,
+      Wrench: <Wrench className="w-6 h-6" />,
+      Pencil: <Pencil className="w-6 h-6" />,
+      Users: <Users className="w-6 h-6" />,
+      ClipboardClock: <ClipboardClock className="w-6 h-6" />,
     };
     return icons[icon];
   };
 
   const stats = isMechanic
     ? [
-        { label: "Vehículos registrados", value: "--", icon: "Car" },
-        { label: "Vehículos en taller", value: "--", icon: "Wrench" },
-        { label: "Revisiones realizadas", value: "--", icon: "Pencil" },
-        { label: "Clientes registrados", value: "--", icon: "Users" },
+        {
+          label: "Vehículos registrados",
+          value: statsData.vehiculosRegistrados,
+          icon: "Car",
+        },
+        {
+          label: "Vehículos en taller",
+          value: statsData.vehiculosEnTaller,
+          icon: "Wrench",
+        },
+        {
+          label: "Revisiones realizadas",
+          value: statsData.revisionesRealizadas,
+          icon: "Pencil",
+        },
+        {
+          label: "Clientes registrados",
+          value: statsData.clientesRegistrados,
+          icon: "Users",
+        },
       ]
     : [
-        { label: "Vehículos en propiedad", value: "--", icon: "Car" },
-        { label: "Ultima revision", value: "--", icon: "Wrench" },
-        { label: "Proxima revisión", value: "--", icon: "ClipboardClock" },
+        {
+          label: "Vehículos en propiedad",
+          value: statsData.vehiculosEnPropiedad,
+          icon: "Car",
+        },
+        {
+          label: "Ultima revision",
+          value: statsData.ultimaRevision,
+          icon: "Wrench",
+        },
+        {
+          label: "Proxima revisión",
+          value: statsData.proximaRevision,
+          icon: "ClipboardClock",
+        },
       ];
 
   return (
@@ -61,7 +120,17 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div
+        className={`grid grid-cols-1 gap-4 ${
+          stats.length === 1
+            ? "sm:grid-cols-1"
+            : stats.length === 2
+            ? "sm:grid-cols-2"
+            : stats.length === 3
+            ? "sm:grid-cols-3"
+            : "sm:grid-cols-4"
+        }`}
+      >
         {stats.map((stat) => (
           <Card key={stat.label}>
             <CardContent className="flex items-center gap-4 py-5">
