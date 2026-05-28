@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { ToastContext } from '../../context/ToastContext'
 
 let toastId = 0
@@ -32,13 +32,6 @@ export function ToastProvider({ children }) {
 
 function Toast({ toast, onClose }) {
   const [isLeaving, setIsLeaving] = useState(false)
-  const timerRef = useRef(null)
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-    }
-  }, [])
 
   const handleClose = () => {
     setIsLeaving(true)

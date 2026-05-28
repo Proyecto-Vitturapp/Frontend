@@ -50,19 +50,19 @@ export function AuthProvider({ children }) {
     }
   }, [fetchUser])
 
-  const login = async (username, password) => {
+  const login = useCallback(async (username, password) => {
     const data = await api.auth.login({ username, password })
     localStorage.setItem('token', data.token)
     localStorage.setItem('userId', data.userId)
     await fetchUser(data.userId)
     return data
-  }
+  }, [fetchUser])
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token')
     localStorage.removeItem('userId')
     setUser(null)
-  }
+  }, [])
 
   const value = useMemo(() => ({
     user,
@@ -71,7 +71,7 @@ export function AuthProvider({ children }) {
     isClient: user?.role === 0,
     isMechanic: user?.role === 1,
     loading,
-  }), [user, loading])
+  }), [user, login, logout, loading])
 
   return (
     <AuthContext.Provider value={value}>

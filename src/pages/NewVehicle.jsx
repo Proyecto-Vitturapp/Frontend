@@ -4,15 +4,13 @@ import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Input, Button, Select } from '../components/ui'
 
-export default function NewCar() {
+export default function NewVehicle() {
   const [form, setForm] = useState({
-    brand: '',
-    model: '',
-    plate: '',
-    year: '',
-    km: '',
-    clientId: '',
-    status: 'active',
+    marca: '',
+    modelo: '',
+    matricula: '',
+    anyoFabricacion: '',
+    tipoVehiculo: '',
   })
   const [loading, setLoading] = useState(false)
   const { addToast } = useToast()
@@ -26,39 +24,42 @@ export default function NewCar() {
     e.preventDefault()
     setLoading(true)
     try {
-      await api.cars.create({
+      await api.vehicles.create({
         ...form,
-        year: parseInt(form.year),
-        km: parseInt(form.km) || 0,
+        anyoFabricacion: parseInt(form.anyoFabricacion),
       })
-      addToast('Coche creado correctamente', 'success')
-      navigate('/dashboard/cars')
+      addToast('Vehiculo creado correctamente', 'success')
+      navigate('/dashboard/vehicles')
     } catch (error) {
-      addToast(error.message || 'Error al crear el coche', 'error')
+      addToast(error.message || 'Error al crear el vehiculo', 'error')
     } finally {
       setLoading(false)
     }
   }
 
-  const statusOptions = [
-    { value: 'active', label: 'Activo' },
-    { value: 'in_shop', label: 'En taller' },
-    { value: 'inactive', label: 'Inactivo' },
+  const vehicleTypes = [
+    { value: 'TURISMO', label: 'Turismo' },
+    { value: 'MOTOCICLETA', label: 'Motocicleta' },
+    { value: 'CAMION', label: 'Camion' },
+    { value: 'FURGONETA', label: 'Furgoneta' },
+    { value: 'AUTOBUS', label: 'Autobus' },
+    { value: 'REMOLQUE', label: 'Remolque' },
+    { value: 'OTRO', label: 'Otro' },
   ]
 
   return (
     <div className="space-y-6">
       <div>
         <button
-          onClick={() => navigate('/dashboard/cars')}
+          onClick={() => navigate('/dashboard/vehicles')}
           className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Volver a coches
+          Volver a vehiculos
         </button>
-        <h1 className="text-2xl font-bold text-secondary-900">Nuevo Coche</h1>
+        <h1 className="text-2xl font-bold text-secondary-900">Nuevo Vehiculo</h1>
         <p className="text-secondary-500 mt-1">Registrar un nuevo vehiculo en el sistema</p>
       </div>
 
@@ -71,16 +72,16 @@ export default function NewCar() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Marca"
-                name="brand"
-                value={form.brand}
+                name="marca"
+                value={form.marca}
                 onChange={handleChange}
                 placeholder="Ej: Seat"
                 required
               />
               <Input
                 label="Modelo"
-                name="model"
-                value={form.model}
+                name="modelo"
+                value={form.modelo}
                 onChange={handleChange}
                 placeholder="Ej: Ibiza"
                 required
@@ -89,52 +90,35 @@ export default function NewCar() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Matricula"
-                name="plate"
-                value={form.plate}
+                name="matricula"
+                value={form.matricula}
                 onChange={handleChange}
                 placeholder="Ej: 1234 ABC"
                 required
               />
               <Input
-                label="Ano"
-                name="year"
+                label="Ano de fabricacion"
+                name="anyoFabricacion"
                 type="number"
-                value={form.year}
+                value={form.anyoFabricacion}
                 onChange={handleChange}
                 placeholder="Ej: 2020"
                 required
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                label="Kilometros"
-                name="km"
-                type="number"
-                value={form.km}
-                onChange={handleChange}
-                placeholder="Ej: 50000"
-              />
-              <Select
-                label="Estado"
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                options={statusOptions}
-              />
-            </div>
-            <Input
-              label="ID del cliente"
-              name="clientId"
-              value={form.clientId}
+            <Select
+              label="Tipo de vehiculo"
+              name="tipoVehiculo"
+              value={form.tipoVehiculo}
               onChange={handleChange}
-              placeholder="ID del propietario"
+              options={vehicleTypes}
               required
             />
             <div className="flex gap-3 pt-4">
               <Button type="submit" variant="primary" disabled={loading}>
-                {loading ? 'Guardando...' : 'Guardar Coche'}
+                {loading ? 'Guardando...' : 'Guardar Vehiculo'}
               </Button>
-              <Button type="button" variant="secondary" onClick={() => navigate('/dashboard/cars')}>
+              <Button type="button" variant="secondary" onClick={() => navigate('/dashboard/vehicles')}>
                 Cancelar
               </Button>
             </div>

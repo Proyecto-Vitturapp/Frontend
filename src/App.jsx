@@ -5,10 +5,10 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import DashboardLayout from './components/layout/DashboardLayout'
 import DashboardHome from './pages/DashboardHome'
-import CarList from './pages/CarList'
-import CarDetail from './pages/CarDetail'
-import NewCar from './pages/NewCar'
-import NewVisit from './pages/NewVisit'
+import VehicleList from './pages/VehicleList'
+import VehicleDetail from './pages/VehicleDetail'
+import NewVehicle from './pages/NewVehicle'
+import NewRevision from './pages/NewRevision'
 
 function App() {
   return (
@@ -26,21 +26,21 @@ function App() {
               }
             >
               <Route index element={<DashboardHome />} />
-              <Route path="cars" element={<CarList />} />
-              <Route path="cars/:id" element={<CarDetail />} />
+              <Route path="vehicles" element={<VehicleList />} />
+              <Route path="vehicles/:plate" element={<VehicleDetail />} />
               <Route
-                path="cars/new"
+                path="vehicles/new"
                 element={
                   <ProtectedRoute mechanicOnly>
-                    <NewCar />
+                    <NewVehicle />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="cars/:id/visit/new"
+                path="vehicles/:plate/revision/new"
                 element={
                   <ProtectedRoute mechanicOnly>
-                    <NewVisit />
+                    <NewRevision />
                   </ProtectedRoute>
                 }
               />

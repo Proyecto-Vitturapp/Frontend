@@ -33,24 +33,30 @@ async function request(endpoint, options = {}) {
 export const api = {
   auth: {
     login: (credentials) => request('/login', { method: 'POST', body: credentials }),
-    register: (data) => request('/auth/register', { method: 'POST', body: data }),
   },
-  cars: {
-    getAll: () => request('/cars'),
-    getMyCars: () => request('/cars/my-cars'),
-    getById: (id) => request(`/cars/${id}`),
-    create: (data) => request('/cars', { method: 'POST', body: data }),
-    update: (id, data) => request(`/cars/${id}`, { method: 'PUT', body: data }),
-    delete: (id) => request(`/cars/${id}`, { method: 'DELETE' }),
+  vehicles: {
+    getAll: () => request('/vehicles'),
+    getByPlate: (plate) => request(`/vehicles/${plate}`),
+    create: (data) => request('/vehicles', { method: 'POST', body: data }),
+    update: (plate, data) => request(`/vehicles/${plate}`, { method: 'PUT', body: data }),
+    delete: (plate) => request(`/vehicles/${plate}`, { method: 'DELETE' }),
   },
-  visits: {
-    getByCar: (carId) => request(`/cars/${carId}/visits`),
-    create: (carId, data) => request(`/cars/${carId}/visits`, { method: 'POST', body: data }),
-    update: (carId, visitId, data) => request(`/cars/${carId}/visits/${visitId}`, { method: 'PUT', body: data }),
-    delete: (carId, visitId) => request(`/cars/${carId}/visits/${visitId}`, { method: 'DELETE' }),
+  revisiones: {
+    getAll: () => request('/revisiones'),
+    getByVehiculo: (matricula) => request(`/revisiones/vehiculo/${matricula}`),
+    getById: (id) => request(`/revisiones/${id}`),
+    create: (data) => request('/revisiones', { method: 'POST', body: data }),
+    update: (id, data) => request(`/revisiones/${id}`, { method: 'PUT', body: data }),
+    delete: (id) => request(`/revisiones/${id}`, { method: 'DELETE' }),
   },
   users: {
+    getAll: () => request('/usuarios'),
     getById: (id) => request(`/usuarios/${id}`),
-    updateProfile: (data) => request('/users/profile', { method: 'PUT', body: data }),
+    create: (data) => request('/usuarios', { method: 'POST', body: data }),
+    update: (id, data) => request(`/usuarios/${id}`, { method: 'PUT', body: data }),
+    delete: (id) => request(`/usuarios/${id}`, { method: 'DELETE' }),
+    getVehicles: (usuarioId) => request(`/usuarios/${usuarioId}/vehiculos`),
+    addVehicle: (usuarioId, plate) => request(`/usuarios/${usuarioId}/vehicles/${plate}`, { method: 'POST' }),
+    getUsersByVehicle: (matricula) => request(`/vehiculos/${matricula}/usuarios`),
   },
 }

@@ -10,8 +10,8 @@ export default function DashboardLayout() {
 
   const navItems = [
     { path: '/dashboard', label: 'Inicio', icon: 'home' },
-    { path: '/dashboard/cars', label: 'Coches', icon: 'car' },
-    ...(isMechanic ? [{ path: '/dashboard/cars/new', label: 'Nuevo Coche', icon: 'add' }] : []),
+    { path: '/dashboard/vehicles', label: 'Vehiculos', icon: 'car' },
+    ...(isMechanic ? [{ path: '/dashboard/vehicles/new', label: 'Nuevo Vehiculo', icon: 'add' }] : []),
   ]
 
   const handleLogout = () => {
@@ -63,7 +63,6 @@ export default function DashboardLayout() {
               </div>
               <div>
                 <h1 className="font-bold text-secondary-900">VitturApp</h1>
-                <p className="text-xs text-secondary-500 capitalize">{isMechanic ? 'Taller' : 'Cliente'}</p>
               </div>
             </div>
           </div>
@@ -95,7 +94,7 @@ export default function DashboardLayout() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-secondary-900 truncate">{user?.name || user?.username || 'Usuario'}</p>
-                <p className="text-xs text-secondary-500 truncate">{user?.email || ''}</p>
+                <p className="text-xs text-secondary-500 truncate">{isMechanic ? 'Mecánico' : 'Cliente'}</p>
               </div>
             </div>
             <button

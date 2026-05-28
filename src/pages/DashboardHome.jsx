@@ -14,13 +14,13 @@ export default function DashboardHome() {
 
   const stats = isMechanic
     ? [
-        { label: 'Coches en taller', value: '--', icon: 'car' },
-        { label: 'Visitas este mes', value: '--', icon: 'calendar' },
+        { label: 'Vehiculos en taller', value: '--', icon: 'car' },
+        { label: 'Revisiones este mes', value: '--', icon: 'calendar' },
         { label: 'Clientes activos', value: '--', icon: 'users' },
       ]
     : [
-        { label: 'Mis coches', value: '--', icon: 'car' },
-        { label: 'Ultima visita', value: '--', icon: 'calendar' },
+        { label: 'Mis vehiculos', value: '--', icon: 'car' },
+        { label: 'Ultima revision', value: '--', icon: 'calendar' },
         { label: 'Proxima revision', value: '--', icon: 'clock' },
       ]
 

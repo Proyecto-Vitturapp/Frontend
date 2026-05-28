@@ -5,30 +5,30 @@ import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '../components/ui'
 
-export default function CarDetail() {
-  const { id } = useParams()
+export default function VehicleDetail() {
+  const { plate } = useParams()
   const navigate = useNavigate()
   const { isMechanic } = useAuth()
   const { addToast } = useToast()
 
-  const [car, setCar] = useState(null)
-  const [visits, setVisits] = useState([])
+  const [vehicle, setVehicle] = useState(null)
+  const [revisiones, setRevisiones] = useState([])
   const [loading, setLoading] = useState(true)
 
   const loadData = useCallback(async () => {
     try {
-      const [carData, visitsData] = await Promise.all([
-        api.cars.getById(id),
-        api.visits.getByCar(id),
+      const [vehicleData, revisionesData] = await Promise.all([
+        api.vehicles.getByPlate(plate),
+        api.revisiones.getByVehiculo(plate),
       ])
-      setCar(carData)
-      setVisits(visitsData)
+      setVehicle(vehicleData)
+      setRevisiones(revisionesData)
     } catch {
       addToast('Error al cargar los datos', 'error')
     } finally {
       setLoading(false)
     }
-  }, [id, addToast])
+  }, [plate, addToast])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -51,27 +51,15 @@ export default function CarDetail() {
     )
   }
 
-  if (!car) {
+  if (!vehicle) {
     return (
       <div className="text-center py-12">
-        <p className="text-secondary-500">Coche no encontrado</p>
-        <Button onClick={() => navigate('/dashboard/cars')} className="mt-4">
+        <p className="text-secondary-500">Vehiculo no encontrado</p>
+        <Button onClick={() => navigate('/dashboard/vehicles')} className="mt-4">
           Volver
         </Button>
       </div>
     )
-  }
-
-  const statusLabels = {
-    active: 'Activo',
-    in_shop: 'En taller',
-    inactive: 'Inactivo',
-  }
-
-  const statusVariants = {
-    active: 'success',
-    in_shop: 'warning',
-    inactive: 'error',
   }
 
   return (
@@ -79,25 +67,25 @@ export default function CarDetail() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate('/dashboard/cars')}
+            onClick={() => navigate('/dashboard/vehicles')}
             className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Volver a coches
+            Volver a vehiculos
           </button>
           <h1 className="text-2xl font-bold text-secondary-900">
-            {car.brand} {car.model}
+            {vehicle.marca} {vehicle.modelo}
           </h1>
-          <p className="text-secondary-500 mt-1">{car.plate}</p>
+          <p className="text-secondary-500 mt-1">{vehicle.matricula}</p>
         </div>
         {isMechanic && (
-          <Button onClick={() => navigate(`/dashboard/cars/${id}/visit/new`)}>
+          <Button onClick={() => navigate(`/dashboard/vehicles/${plate}/revision/new`)}>
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            Nueva Visita
+            Nueva Revision
           </Button>
         )}
       </div>
@@ -111,31 +99,23 @@ export default function CarDetail() {
             <dl className="space-y-4">
               <div>
                 <dt className="text-sm text-secondary-500">Marca</dt>
-                <dd className="text-sm font-medium text-secondary-900">{car.brand}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.marca}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Modelo</dt>
-                <dd className="text-sm font-medium text-secondary-900">{car.model}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.modelo}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Matricula</dt>
-                <dd className="text-sm font-medium text-secondary-900">{car.plate}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.matricula}</dd>
               </div>
               <div>
-                <dt className="text-sm text-secondary-500">Ano</dt>
-                <dd className="text-sm font-medium text-secondary-900">{car.year}</dd>
+                <dt className="text-sm text-secondary-500">Ano fabricacion</dt>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.anyoFabricacion}</dd>
               </div>
               <div>
-                <dt className="text-sm text-secondary-500">Kilometros</dt>
-                <dd className="text-sm font-medium text-secondary-900">{car.km?.toLocaleString() || '--'} km</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-secondary-500">Estado</dt>
-                <dd>
-                  <Badge variant={statusVariants[car.status] || 'default'}>
-                    {statusLabels[car.status] || car.status}
-                  </Badge>
-                </dd>
+                <dt className="text-sm text-secondary-500">Tipo</dt>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.tipoVehiculo}</dd>
               </div>
             </dl>
           </CardContent>
@@ -143,37 +123,37 @@ export default function CarDetail() {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Historial de visitas ({visits.length})</CardTitle>
+            <CardTitle>Historial de revisiones ({revisiones.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            {visits.length === 0 ? (
+            {revisiones.length === 0 ? (
               <p className="text-secondary-500 text-sm text-center py-8">
-                No hay visitas registradas
+                No hay revisiones registradas
               </p>
             ) : (
               <div className="space-y-4">
-                {visits.map((visit) => (
+                {revisiones.map((revision) => (
                   <div
-                    key={visit.id}
+                    key={revision.id}
                     className="p-4 border border-secondary-200 rounded-lg hover:border-primary-200 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-secondary-900">
-                        {visit.date ? formatDate(visit.date) : 'Sin fecha'}
+                        {revision.fecha ? formatDate(revision.fecha) : 'Sin fecha'}
                       </span>
-                      {visit.type && (
-                        <Badge variant="primary">{visit.type}</Badge>
+                      {revision.tipo && (
+                        <Badge variant="primary">{revision.tipo}</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-secondary-600">{visit.description}</p>
-                    {visit.mechanic && (
+                    <p className="text-sm text-secondary-600">{revision.descripcion}</p>
+                    {revision.mecanico && (
                       <p className="text-xs text-secondary-400 mt-2">
-                        Mecanico: {visit.mechanic}
+                        Mecanico: {revision.mecanico}
                       </p>
                     )}
-                    {visit.cost && (
+                    {revision.coste && (
                       <p className="text-sm font-medium text-primary-600 mt-2">
-                        {visit.cost} EUR
+                        {revision.coste} EUR
                       </p>
                     )}
                   </div>

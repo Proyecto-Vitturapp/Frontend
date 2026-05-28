@@ -1,4 +1,4 @@
-export function Select({ label, value, onChange, options, error, required = false, placeholder = 'Seleccionar...' }) {
+export function Select({ label, name, value, onChange, options, error, required = false, placeholder = 'Seleccionar...' }) {
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
@@ -8,6 +8,7 @@ export function Select({ label, value, onChange, options, error, required = fals
         </label>
       )}
       <select
+        name={name}
         value={value}
         onChange={onChange}
         required={required}
