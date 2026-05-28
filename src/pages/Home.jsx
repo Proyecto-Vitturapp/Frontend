@@ -28,7 +28,7 @@ export default function Home() {
 
   const { data: revisionesTotal } = useApiCache(
     'revisiones-total',
-    api.revisiones.getTotal,
+    api.reviews.getAllTotal,
     isMechanic
   )
 

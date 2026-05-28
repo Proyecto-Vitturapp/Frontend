@@ -50,15 +50,17 @@ export const api = {
     update: (plate, data) => request(`/vehicles/${plate}`, { method: "PUT", body: data }),
     delete: (plate) => request(`/vehicles/${plate}`, { method: "DELETE" }),
   },
-  revisiones: {
-    getAll: () => request("/revisiones"),
-    getTotal: () => request("/revisiones/total"),
-    getByVehiculo: (matricula) => request(`/revisiones/vehiculo/${matricula}`),
-    getById: (id) => request(`/revisiones/${id}`),
+  reviews: {
+    getAll: () => request("/reviews/all"),
+    getAllTotal: () => request("/reviews/all/total"),
+    getByVehiculo: (matricula) => request(`/reviews/${matricula}`),
+    getById: (id) => request(`/review/${id}`),
+  },
+  review: {
     create: (data) => request("/revisiones", { method: "POST", body: data }),
     update: (id, data) => request(`/revisiones/${id}`, { method: "PUT", body: data }),
     delete: (id) => request(`/revisiones/${id}`, { method: "DELETE" }),
-  },
+  }, 
   users: {
     getAll: () => request("/usuarios"),
     getAllTotal: () => request("/usuarios/total"),

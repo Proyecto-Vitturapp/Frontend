@@ -27,7 +27,7 @@ export default function NewRevision() {
     e.preventDefault()
     setLoading(true)
     try {
-      await api.revisiones.create({
+      await api.review.create({
         matricula: plate,
         ...form,
         coste: parseFloat(form.coste) || 0,

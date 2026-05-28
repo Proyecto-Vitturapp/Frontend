@@ -14,7 +14,7 @@ export default function VehicleDetail() {
   const { addToast } = useToast()
 
   const [vehicle, setVehicle] = useState(null)
-  const [revisiones, setRevisiones] = useState([])
+  const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(true)
   const [authorized, setAuthorized] = useState(false)
 
@@ -28,10 +28,10 @@ export default function VehicleDetail() {
     try {
       const [vehicleData, revisionesData] = await Promise.all([
         api.vehicles.getByPlate(plate),
-        api.revisiones.getByVehiculo(plate),
+        api.reviews.getByVehiculo(plate),
       ])
       setVehicle(vehicleData)
-      setRevisiones(revisionesData)
+      setReviews(revisionesData)
     } catch {
       addToast('Error al cargar los datos', 'error')
     } finally {
@@ -154,16 +154,16 @@ export default function VehicleDetail() {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Historial de revisiones ({revisiones.length})</CardTitle>
+            <CardTitle>Historial de revisiones ({reviews.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            {revisiones.length === 0 ? (
+            {reviews.length === 0 ? (
               <p className="text-secondary-500 text-sm text-center py-8">
                 No hay revisiones registradas
               </p>
             ) : (
               <div className="space-y-4">
-                {revisiones.map((revision) => (
+                {reviews.map((revision) => (
                   <div
                     key={revision.id}
                     className="p-4 border border-secondary-200 rounded-lg hover:border-primary-200 transition-colors"
