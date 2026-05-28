@@ -1,71 +1,82 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useToast } from '../components/ui'
-import { api } from '../services/api'
-import { Card, CardContent, CardHeader, CardTitle, Input, Button, Select } from '../components/ui'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../components/ui";
+import { api } from "../services/api";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  Button,
+  Select,
+} from "../components/ui";
+import { Undo2 } from "lucide-react";
 
 export default function NewVehicle() {
   const [form, setForm] = useState({
-    marca: '',
-    modelo: '',
-    matricula: '',
-    anyoFabricacion: '',
-    tipoVehiculo: '',
-  })
-  const [loading, setLoading] = useState(false)
-  const { addToast } = useToast()
-  const navigate = useNavigate()
+    marca: "",
+    modelo: "",
+    matricula: "",
+    anyoFabricacion: "",
+    tipoVehiculo: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const { addToast } = useToast();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
     try {
       await api.vehicle.create({
         ...form,
         anyoFabricacion: parseInt(form.anyoFabricacion),
-      })
-      addToast('Vehiculo creado correctamente', 'success')
-      navigate('/dashboard/vehicles')
+      });
+      addToast("Vehiculo creado correctamente", "success");
+      navigate("/dashboard/vehicles");
     } catch (error) {
-      addToast(error.message || 'Error al crear el vehiculo', 'error')
+      addToast(error.message || "Error al crear el vehiculo", "error");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const vehicleTypes = [
-    { value: 'TURISMO', label: 'Turismo' },
-    { value: 'MOTOCICLETA', label: 'Motocicleta' },
-    { value: 'CAMION', label: 'Camion' },
-    { value: 'FURGONETA', label: 'Furgoneta' },
-    { value: 'AUTOBUS', label: 'Autobus' },
-    { value: 'REMOLQUE', label: 'Remolque' },
-    { value: 'OTRO', label: 'Otro' },
-  ]
+    { value: "TURISMO", label: "Turismo" },
+    { value: "MOTOCICLETA", label: "Motocicleta" },
+    { value: "CAMION", label: "Camion" },
+    { value: "FURGONETA", label: "Furgoneta" },
+    { value: "AUTOBUS", label: "Autobus" },
+    { value: "REMOLQUE", label: "Remolque" },
+    { value: "OTRO", label: "Otro" },
+  ];
 
   return (
     <div className="space-y-6">
       <div>
         <button
-          onClick={() => navigate('/dashboard/vehicles')}
+          onClick={() => navigate("/dashboard/vehicles")}
           className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver a vehiculos
+          <Undo2 className="w-4 h-4 mr-2" />
+          Volver a la lista de vehículos
         </button>
-        <h1 className="text-2xl font-bold text-secondary-900">Nuevo Vehiculo</h1>
-        <p className="text-secondary-500 mt-1">Registrar un nuevo vehiculo en el sistema</p>
+        <h1 className="text-2xl font-bold text-secondary-900">
+          Nuevo vehículo
+        </h1>
+        <p className="text-secondary-500 mt-1">
+          Aquí puedes registrar un nuevo vehículo en el sistema
+        </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Datos del vehiculo</CardTitle>
+          <CardTitle>Datos del vehículo</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,7 +86,7 @@ export default function NewVehicle() {
                 name="marca"
                 value={form.marca}
                 onChange={handleChange}
-                placeholder="Ej: Seat"
+                placeholder="Introduce la marca del vehículo"
                 required
               />
               <Input
@@ -83,7 +94,7 @@ export default function NewVehicle() {
                 name="modelo"
                 value={form.modelo}
                 onChange={handleChange}
-                placeholder="Ej: Ibiza"
+                placeholder="Introduce el modelo del vehículo"
                 required
               />
             </div>
@@ -93,21 +104,21 @@ export default function NewVehicle() {
                 name="matricula"
                 value={form.matricula}
                 onChange={handleChange}
-                placeholder="Ej: 1234 ABC"
+                placeholder="Introduce la matrícula del vehículo"
                 required
               />
               <Input
-                label="Ano de fabricacion"
+                label="Año de fabricación"
                 name="anyoFabricacion"
                 type="number"
                 value={form.anyoFabricacion}
                 onChange={handleChange}
-                placeholder="Ej: 2020"
+                placeholder="Introduce el año de fabricación"
                 required
               />
             </div>
             <Select
-              label="Tipo de vehiculo"
+              label="Tipo de vehículo"
               name="tipoVehiculo"
               value={form.tipoVehiculo}
               onChange={handleChange}
@@ -116,9 +127,13 @@ export default function NewVehicle() {
             />
             <div className="flex gap-3 pt-4">
               <Button type="submit" variant="primary" disabled={loading}>
-                {loading ? 'Guardando...' : 'Guardar Vehiculo'}
+                {loading ? "Guardando..." : "Guardar vehículo"}
               </Button>
-              <Button type="button" variant="secondary" onClick={() => navigate('/dashboard/vehicles')}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate("/dashboard/vehicles")}
+              >
                 Cancelar
               </Button>
             </div>
@@ -126,5 +141,5 @@ export default function NewVehicle() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

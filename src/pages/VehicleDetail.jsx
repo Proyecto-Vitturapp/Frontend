@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '../components/ui'
+import { Undo2 } from 'lucide-react';
 
 export default function VehicleDetail() {
   const { plate } = useParams()
@@ -70,10 +71,8 @@ export default function VehicleDetail() {
             onClick={() => navigate('/dashboard/vehicles')}
             className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Volver a vehiculos
+          <Undo2 className="w-4 h-4 mr-2" />
+          Volver a la lista de vehículos
           </button>
           <h1 className="text-2xl font-bold text-secondary-900">
             {vehicle.marca} {vehicle.modelo}

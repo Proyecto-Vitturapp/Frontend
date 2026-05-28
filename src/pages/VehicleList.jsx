@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../components/ui'
+import { Plus } from 'lucide-react';
 
 export default function VehicleList() {
   const { user, isMechanic } = useAuth()
@@ -65,14 +66,12 @@ export default function VehicleList() {
         <div>
           <h1 className="text-2xl font-bold text-secondary-900">Vehículos</h1>
           <p className="text-secondary-500 mt-1">
-            Aquí podrás ver todos {isMechanic ? 'los vehículos registrados en el taller' : 'tus vehículos que traes a este taller'}
+            Aquí puedes ver todos {isMechanic ? 'los vehículos registrados en el taller' : 'tus vehículos que traes a este taller'}
           </p>
         </div>
         {isMechanic && (
           <Button onClick={() => navigate('/dashboard/vehicles/new')}>
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
+            <Plus className="w-4 h-4 mr-2" />
             Nuevo vehículo
           </Button>
         )}
