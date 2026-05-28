@@ -3,9 +3,41 @@ import { useAuth } from "../context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui";
 import { CarFront, Users, Wrench, Pencil, ClipboardClock } from "lucide-react";
 import { api } from "../services/api";
+import { useApiCache } from "../hooks/useApiCache";
 
 export default function Home() {
-  const { user, isMechanic, loading } = useAuth();
+  const { user, isMechanic, loading: authLoading } = useAuth();
+
+  const { data: vehiculosTotal } = useApiCache(
+    'vehicles-all-total',
+    api.vehicles.getAllTotal,
+    isMechanic
+  )
+
+  const { data: vehiculosEnTaller } = useApiCache(
+    'vehicles-workshop-total',
+    api.vehicles.getInWorkshopTotal,
+    isMechanic
+  )
+
+  const { data: usuariosTotal } = useApiCache(
+    'users-all-total',
+    api.users.getAllTotal,
+    isMechanic
+  )
+
+  const { data: revisionesTotal } = useApiCache(
+    'revisiones-total',
+    api.revisiones.getTotal,
+    isMechanic
+  )
+
+  const { data: userVehiclesTotal } = useApiCache(
+    `vehicles-user-${user?.id}`,
+    () => api.vehicles.getAllUserVehicles(user.id),
+    !isMechanic && !!user
+  )
+
   const [statsData, setStatsData] = useState({
     vehiculosRegistrados: "--",
     vehiculosEnTaller: "--",
@@ -17,36 +49,32 @@ export default function Home() {
   });
 
   useEffect(() => {
-    const fetchTotals = async () => {
-      try {
-        const [vehiculosTotal, vehiculosEnTaller, usuariosTotal, revisionesTotal] =
-          await Promise.all([
-            api.vehicles.getAllTotal(),
-            api.vehicles.getInWorkshopTotal(),
-            api.users.getAllTotal(),
-            api.revisiones.getTotal(),
-          ]);
-
-        setStatsData({
-          vehiculosRegistrados: vehiculosTotal,
-          vehiculosEnTaller: vehiculosEnTaller,
-          revisionesRealizadas: revisionesTotal,
-          clientesRegistrados: usuariosTotal,
-          vehiculosEnPropiedad: "--",
-          ultimaRevision: "--",
-          proximaRevision: "--",
-        });
-      } catch (error) {
-        console.error("Error fetching totals:", error);
-      }
-    };
-
-    if (!loading) {
-      fetchTotals();
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (isMechanic) {
+      setStatsData({
+        vehiculosRegistrados: vehiculosTotal ?? "--",
+        vehiculosEnTaller: vehiculosEnTaller ?? "--",
+        revisionesRealizadas: revisionesTotal ?? "--",
+        clientesRegistrados: usuariosTotal ?? "--",
+        vehiculosEnPropiedad: "--",
+        ultimaRevision: "--",
+        proximaRevision: "--",
+      })
+    } else if (user) {
+      setStatsData({
+        vehiculosRegistrados: "--",
+        vehiculosEnTaller: "--",
+        revisionesRealizadas: "--",
+        clientesRegistrados: "--",
+        vehiculosEnPropiedad: userVehiclesTotal?.length ?? "--",
+        ultimaRevision: "--",
+        proximaRevision: "--",
+      })
     }
-  }, [loading]);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [isMechanic, user, vehiculosTotal, vehiculosEnTaller, revisionesTotal, usuariosTotal, userVehiclesTotal])
 
-  if (loading) {
+  if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-secondary-500">Cargando...</div>

@@ -1,48 +1,29 @@
-import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useToast } from '../components/ui'
-import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../components/ui'
-import { Plus } from 'lucide-react';
+import { api } from '../services/api'
+import { useApiCache } from '../hooks/useApiCache'
 
 export default function VehicleList() {
   const { user, isMechanic } = useAuth()
-  const [loading, setLoading] = useState(true)
-  const { addToast } = useToast()
-  const [vehicles, setVehicles] = useState([])
-  const [workshopVehicles, setWorkshopVehicles] = useState([])
   const navigate = useNavigate()
 
-  const loadVehicles = useCallback(async () => {
-    try {
-      const data = isMechanic
-        ? await api.vehicles.getAll()
-        : await api.vehicles.getAllUserVehicles(user.id)
-      setVehicles(data)
-    } catch {
-      addToast('Error al cargar los vehiculos', 'error')
-    } finally {
-      setLoading(false)
-    }
-  }, [isMechanic, user, addToast])
+  const vehiclesKey = isMechanic ? 'vehicles-all' : `vehicles-user-${user?.id}`
+  const workshopKey = isMechanic ? 'vehicles-workshop' : `vehicles-workshop-user-${user?.id}`
 
-  const loadWorkshopVehicles = useCallback(async () => {
-    try {
-      const data = isMechanic
-        ? await api.vehicles.getInWorkshop()
-        : await api.vehicles.getInWorkshopUserVehicles(user.id)
-      setWorkshopVehicles(data)
-    } catch {
-      addToast('Error al cargar los vehiculos en taller', 'error')
-    }
-  }, [isMechanic, user, addToast])
+  const { data: vehicles = [], loading: vehiclesLoading } = useApiCache(
+    vehiclesKey,
+    () => isMechanic ? api.vehicles.getAll() : api.vehicles.getAllUserVehicles(user.id),
+    !!user
+  )
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadVehicles()
-    loadWorkshopVehicles()
-  }, [loadVehicles, loadWorkshopVehicles])
+  const { data: workshopVehicles = [], loading: workshopLoading } = useApiCache(
+    workshopKey,
+    () => isMechanic ? api.vehicles.getInWorkshop() : api.vehicles.getInWorkshopUserVehicles(user.id),
+    !!user
+  )
+
+  const loading = vehiclesLoading || workshopLoading
 
   const columns = [
     { key: 'marca', label: 'Marca' },
@@ -71,7 +52,9 @@ export default function VehicleList() {
         </div>
         {isMechanic && (
           <Button onClick={() => navigate('/dashboard/vehicles/new')}>
-            <Plus className="w-4 h-4 mr-2" />
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
             Nuevo vehículo
           </Button>
         )}

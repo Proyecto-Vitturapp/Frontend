@@ -3,18 +3,26 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
-import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '../components/ui'
-import { Undo2 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button, ErrorScreen } from '../components/ui'
+import { Undo2 } from 'lucide-react'
+import { useApiCache } from '../hooks/useApiCache'
 
 export default function VehicleDetail() {
   const { plate } = useParams()
   const navigate = useNavigate()
-  const { isMechanic } = useAuth()
+  const { user, isMechanic } = useAuth()
   const { addToast } = useToast()
 
   const [vehicle, setVehicle] = useState(null)
   const [revisiones, setRevisiones] = useState([])
   const [loading, setLoading] = useState(true)
+  const [authorized, setAuthorized] = useState(false)
+
+  const { data: userVehicles } = useApiCache(
+    `vehicles-user-${user?.id}`,
+    () => api.vehicles.getAllUserVehicles(user.id),
+    !isMechanic && !!user
+  )
 
   const loadData = useCallback(async () => {
     try {
@@ -32,9 +40,23 @@ export default function VehicleDetail() {
   }, [plate, addToast])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadData()
-  }, [loadData])
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (!isMechanic && userVehicles !== undefined && userVehicles !== null) {
+      const isOwner = userVehicles.some(v => v.matricula === plate)
+      setAuthorized(isOwner)
+      if (!isOwner) {
+        setLoading(false)
+        return
+      }
+    } else if (isMechanic) {
+      setAuthorized(true)
+    }
+
+    if (authorized || isMechanic) {
+      loadData()
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [isMechanic, userVehicles, plate, loadData, authorized])
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('es-ES', {
@@ -52,14 +74,27 @@ export default function VehicleDetail() {
     )
   }
 
+  if (!isMechanic && !authorized) {
+    return (
+      <ErrorScreen
+        title="Permisos insuficientes"
+        message="No puedes ver los detalles de los vehículos que no son de tu propiedad"
+        icon="shield"
+        backRoute="/dashboard/vehicles"
+        backLabel="Volver a la lista de vehículos"
+      />
+    )
+  }
+
   if (!vehicle) {
     return (
-      <div className="text-center py-12">
-        <p className="text-secondary-500">Vehiculo no encontrado</p>
-        <Button onClick={() => navigate('/dashboard/vehicles')} className="mt-4">
-          Volver
-        </Button>
-      </div>
+      <ErrorScreen
+        title="Vehículo no encontrado"
+        message="El vehículo que buscas no existe en el sistema"
+        icon="file"
+        backRoute="/dashboard/vehicles"
+        backLabel="Volver a la lista de vehículos"
+      />
     )
   }
 
