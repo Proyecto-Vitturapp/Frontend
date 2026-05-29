@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui";
 import { CarFront, Users, Wrench, Pencil, ClipboardClock } from "lucide-react";
 import { api } from "../services/api";
 import { useApiCache } from "../hooks/useApiCache";
+import { House } from "lucide-react";
 
 export default function Home() {
   const { user, isMechanic, loading: authLoading } = useAuth();
@@ -137,9 +138,10 @@ export default function Home() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-secondary-900">
-          Bienvenido, {user?.name || user?.username || "Usuario"}
-        </h1>
+        <div className="flex gap-2">
+          <House className="w-8 h-8 text-primary-500" />
+          <h1 className="text-2xl font-bold text-secondary-900">Bienvenido/a, {user?.name || user?.username || "Usuario"}</h1>
+        </div>
         <p className="text-secondary-500 mt-1">
           Desde este panel podrás tener un control sobre{" "}
           {isMechanic

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../comp
 import { Modal } from '../components/ui/Modal'
 import { api } from '../services/api'
 import { useApiCache } from '../hooks/useApiCache'
-import { Eye, Pencil, Trash2 } from 'lucide-react'
+import { Eye, Pencil, Trash2, CarFront } from 'lucide-react'
 
 export default function VehicleList() {
   const { user, isMechanic } = useAuth()
@@ -121,7 +121,10 @@ export default function VehicleList() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-secondary-900">Vehículos</h1>
+          <div className="flex gap-2">
+            <CarFront className="w-8 h-8 text-primary-500" />
+            <h1 className="text-2xl font-bold text-secondary-900">Vehículos</h1>
+          </div>
           <p className="text-secondary-500 mt-1">
             Aquí puedes ver todos {isMechanic ? 'los vehículos registrados en el taller' : 'tus vehículos que traes a este taller'}
           </p>
