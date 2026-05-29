@@ -15,6 +15,7 @@ export default function VehicleDetails() {
 
   const [vehicle, setVehicle] = useState(null)
   const [reviews, setReviews] = useState([])
+  const [userNames, setUserNames] = useState({})
   const [loading, setLoading] = useState(true)
   const [authorized, setAuthorized] = useState(false)
 
@@ -30,8 +31,23 @@ export default function VehicleDetails() {
         api.vehicles.getByPlate(plate),
         api.reviews.getByVehiculo(plate),
       ])
+      const reviews = Array.isArray(revisionesData) ? revisionesData : revisionesData ? [revisionesData] : []
       setVehicle(vehicleData)
-      setReviews(Array.isArray(revisionesData) ? revisionesData : revisionesData ? [revisionesData] : [])
+      setReviews(reviews)
+
+      const userIds = [...new Set(reviews.map(r => r.idCliente).filter(Boolean))]
+      const names = {}
+      await Promise.all(
+        userIds.map(async (id) => {
+          try {
+            const user = await api.users.getById(id)
+            names[id] = `${user.nombre} ${user.apellido || ''} ${user.segundoApellido || ''}`.trim()
+          } catch {
+            names[id] = 'Usuario desconocido'
+          }
+        })
+      )
+      setUserNames(names)
     } catch {
       addToast('Error al cargar los datos', 'error')
     } finally {
@@ -187,6 +203,11 @@ export default function VehicleDetails() {
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-secondary-900">
                         {revision.fechaRevision ? formatDate(revision.fechaRevision) : 'Sin fecha'}
+                        {revision.idCliente && userNames[revision.idCliente] && (
+                          <span className="font-normal text-secondary-500 ml-2">
+                            por {userNames[revision.idCliente]}
+                          </span>
+                        )}
                       </span>
                       {revision.kilometrajeActual && (
                         <Badge variant="primary">{revision.kilometrajeActual.toLocaleString()} km</Badge>
