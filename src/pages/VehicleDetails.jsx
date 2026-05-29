@@ -16,6 +16,7 @@ export default function VehicleDetails() {
   const [vehicle, setVehicle] = useState(null)
   const [reviews, setReviews] = useState([])
   const [userNames, setUserNames] = useState({})
+  const [vehicleUsers, setVehicleUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [authorized, setAuthorized] = useState(false)
 
@@ -27,13 +28,15 @@ export default function VehicleDetails() {
 
   const loadData = useCallback(async () => {
     try {
-      const [vehicleData, revisionesData] = await Promise.all([
+      const [vehicleData, revisionesData, usersData] = await Promise.all([
         api.vehicles.getByPlate(plate),
         api.reviews.getByVehiculo(plate),
+        api.users.getUsersByVehicle(plate),
       ])
       const reviews = Array.isArray(revisionesData) ? revisionesData : revisionesData ? [revisionesData] : []
       setVehicle(vehicleData)
       setReviews(reviews)
+      setVehicleUsers(Array.isArray(usersData) ? usersData : [])
 
       const userIds = [...new Set(reviews.map(r => r.idCliente).filter(Boolean))]
       const names = {}
@@ -177,6 +180,14 @@ export default function VehicleDetails() {
               <div>
                 <dt className="text-sm text-secondary-500">Fecha próxima revisión</dt>
                 <dd className="text-sm font-medium text-secondary-900">{vehicle.fechaProximoMantenimiento ? formatDate(vehicle.fechaProximoMantenimiento) : 'Sin fecha'}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-secondary-500">Usuarios con acceso</dt>
+                <dd className="text-sm font-medium text-secondary-900">
+                  {vehicleUsers.length === 0
+                    ? 'Ninguno'
+                    : vehicleUsers.map((u) => `${u.nombre} ${u.apellido || ''} ${u.segundoApellido || ''}`.trim()).join(', ')}
+                </dd>
               </div>
             </dl>
           </CardContent>
