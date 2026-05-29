@@ -25,11 +25,20 @@ export default function VehicleList() {
 
   const loading = vehiclesLoading || workshopLoading
 
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+
   const columns = [
     { key: 'marca', label: 'Marca' },
     { key: 'modelo', label: 'Modelo' },
     { key: 'matricula', label: 'Matrícula' },
     { key: 'anyoFabricacion', label: 'Año de fabricación' },
+    { key: 'fechaProximoMantenimiento', label: 'Fecha próxima revisión', render: (value) => value ? formatDate(value) : 'Sin fecha' },
     { key: 'tipoVehiculo', label: 'Tipo de vehículo' },
   ]
 
