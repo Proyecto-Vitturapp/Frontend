@@ -220,7 +220,7 @@ export default function VehicleDetails() {
                           </span>
                         )}
                       </span>
-                      {revision.kilometrajeActual && (
+                      {revision.actual_km && (
                         <Badge variant="primary">{revision.actual_km.toLocaleString()} km</Badge>
                       )}
                     </div>
