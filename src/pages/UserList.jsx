@@ -33,7 +33,7 @@ export default function UserList() {
   const handleDeleteConfirm = async () => {
     if (!userToDelete) return
     try {
-      await api.user.delete(userToDelete.idUsuario)
+      await api.user.delete(userToDelete.user_id)
       setDeleteModalOpen(false)
       setUserToDelete(null)
       refreshUsers()
@@ -51,12 +51,12 @@ export default function UserList() {
   }
 
   const columns = [
-    { key: 'nombre', label: 'Nombre' },
-    { key: 'apellido', label: 'Apellido' },
+    { key: 'name', label: 'Nombre' },
+    { key: 'first_last_name', label: 'Apellido' },
     { key: 'username', label: 'Username' },
     { key: 'email', label: 'Email' },
-    { key: 'telefono', label: 'Teléfono' },
-    { key: 'fechaCreacion', label: 'Fecha de creación', render: (value) => value ? formatDate(value) : 'Sin fecha' },
+    { key: 'phone_number', label: 'Teléfono' },
+    { key: 'creation_date', label: 'Fecha de creación', render: (value) => value ? formatDate(value) : 'Sin fecha' },
   ]
 
   if (isMechanic) {
@@ -68,7 +68,7 @@ export default function UserList() {
           <Button
             onClick={(e) => {
               e.stopPropagation()
-              navigate(`/dashboard/users/${row.idUsuario}`)
+              navigate(`/dashboard/users/${row.user_id}`)
             }}
             className="cursor-pointer"
           >
@@ -77,7 +77,7 @@ export default function UserList() {
           <Button
             onClick={(e) => {
               e.stopPropagation()
-              handleEdit(row.idUsuario)
+              handleEdit(row.user_id)
             }}
             className="cursor-pointer"
           >
@@ -137,7 +137,7 @@ export default function UserList() {
           <Table
             columns={columns}
             data={users}
-            onRowClick={(userItem) => navigate(`/dashboard/users/${userItem.idUsuario}`)}
+            onRowClick={(userItem) => navigate(`/dashboard/users/${userItem.user_id}`)}
           />
         </CardContent>
       </Card>
@@ -148,11 +148,11 @@ export default function UserList() {
           setDeleteModalOpen(false)
           setUserToDelete(null)
         }}
-        title={`Eliminar usuario ${userToDelete?.nombre} ${userToDelete?.apellido}`}
+        title={`Eliminar usuario ${userToDelete?.name} ${userToDelete?.first_last_name}`}
       >
         <div className="space-y-4">
           <p className="text-secondary-700">
-            ¿Estás seguro de que deseas eliminar al usuario <strong>{userToDelete?.nombre} {userToDelete?.apellido}</strong> con username <strong>{userToDelete?.username}</strong>?
+            ¿Estás seguro de que deseas eliminar al usuario <strong>{userToDelete?.name} {userToDelete?.first_last_name}</strong> con username <strong>{userToDelete?.username}</strong>?
           </p>
           <p className="text-secondary-700">
             En caso de que tenga vehículos asociados, estos también serán eliminados. Esta acción no se puede deshacer.

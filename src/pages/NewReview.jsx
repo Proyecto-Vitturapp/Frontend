@@ -46,13 +46,13 @@ export default function NewReview() {
       }
 
       const payload = {
-        matricula: plate,
-        idUsuario: user.id,
-        fechaRevision: formatDate(form.fecha),
-        kilometrajeActual: parseInt(form.km) || 0,
-        diagnosticoResultado: form.descripcion,
-        importe: parseFloat(form.coste) || 0,
-        fechaProximoMantenimiento: formatDate(form.proximaRevision),
+        plate: plate,
+        user_id: user.id,
+        review_date: formatDate(form.fecha),
+        actual_km: parseInt(form.km) || 0,
+        review_note: form.descripcion,
+        import: parseFloat(form.coste) || 0,
+        next_review_date: formatDate(form.proximaRevision),
       }
       console.log('Payload:', JSON.stringify(payload, null, 2))
       await api.review.create(payload);

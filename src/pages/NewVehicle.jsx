@@ -17,11 +17,11 @@ import { Undo2 } from "lucide-react";
 
 export default function NewVehicle() {
   const [form, setForm] = useState({
-    marca: "",
-    modelo: "",
-    matricula: "",
-    anyoFabricacion: "",
-    tipoVehiculo: "",
+    brand: "",
+    model: "",
+    plate: "",
+    fabrication_year: "",
+    vehicle_type: "",
   });
   const [loading, setLoading] = useState(false);
   const { user, isMechanic } = useAuth();
@@ -38,7 +38,7 @@ export default function NewVehicle() {
     try {
       await api.vehicle.create({
         ...form,
-        anyoFabricacion: parseInt(form.anyoFabricacion),
+        fabrication_year: parseInt(form.fabrication_year),
       });
       clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
       clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
@@ -88,16 +88,16 @@ export default function NewVehicle() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Marca"
-                name="marca"
-                value={form.marca}
+                name="brand"
+                value={form.brand}
                 onChange={handleChange}
                 placeholder="Introduce la marca del vehículo"
                 required
               />
               <Input
                 label="Modelo"
-                name="modelo"
-                value={form.modelo}
+                name="model"
+                value={form.model}
                 onChange={handleChange}
                 placeholder="Introduce el modelo del vehículo"
                 required
@@ -106,17 +106,17 @@ export default function NewVehicle() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Matricula"
-                name="matricula"
-                value={form.matricula}
+                name="plate"
+                value={form.plate}
                 onChange={handleChange}
                 placeholder="Introduce la matrícula del vehículo"
                 required
               />
               <Input
                 label="Año de fabricación"
-                name="anyoFabricacion"
+                name="fabrication_year"
                 type="number"
-                value={form.anyoFabricacion}
+                value={form.fabrication_year}
                 onChange={handleChange}
                 placeholder="Introduce el año de fabricación"
                 required
@@ -124,8 +124,8 @@ export default function NewVehicle() {
             </div>
             <Select
               label="Tipo de vehículo"
-              name="tipoVehiculo"
-              value={form.tipoVehiculo}
+              name="vehicle_type"
+              value={form.vehicle_type}
               onChange={handleChange}
               options={vehicleTypes}
               required

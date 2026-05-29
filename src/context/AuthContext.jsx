@@ -23,13 +23,13 @@ export function AuthProvider({ children }) {
     try {
       const data = await api.users.getById(id)
       setUser({
-        id: data.idUsuario,
+        id: data.user_id,
         username: data.username,
-        name: `${data.nombre} ${data.apellido}${data.segundoApellido ? ' ' + data.segundoApellido : ''}`.trim(),
+        name: `${data.name} ${data.first_last_name}${data.second_last_name ? ' ' + data.second_last_name : ''}`.trim(),
         email: data.email,
-        role: data.rol,
-        telefono: data.telefono,
-        fechaCreacion: data.fechaCreacion,
+        role: data.role,
+        telefono: data.phone_number,
+        fechaCreacion: data.creation_date,
       })
     } catch (error) {
       setUser(null)

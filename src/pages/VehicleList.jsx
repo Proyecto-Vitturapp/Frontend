@@ -42,7 +42,7 @@ export default function VehicleList() {
   const handleDeleteConfirm = async () => {
     if (!vehicleToDelete) return
     try {
-      await api.vehicle.delete(vehicleToDelete.matricula)
+      await api.vehicle.delete(vehicleToDelete.plate)
       setDeleteModalOpen(false)
       setVehicleToDelete(null)
       refreshVehicles()
@@ -61,12 +61,12 @@ export default function VehicleList() {
   }
 
   const columns = [
-    { key: 'marca', label: 'Marca' },
-    { key: 'modelo', label: 'Modelo' },
-    { key: 'matricula', label: 'Matrícula' },
-    { key: 'anyoFabricacion', label: 'Año de fabricación' },
-    { key: 'fechaProximoMantenimiento', label: 'Fecha próxima revisión', render: (value) => value ? formatDate(value) : 'Sin fecha' },
-    { key: 'tipoVehiculo', label: 'Tipo de vehículo' },
+    { key: 'brand', label: 'Marca' },
+    { key: 'model', label: 'Modelo' },
+    { key: 'plate', label: 'Matrícula' },
+    { key: 'fabrication_year', label: 'Año de fabricación' },
+    { key: 'next_review_date', label: 'Fecha próxima revisión', render: (value) => value ? formatDate(value) : 'Sin fecha' },
+    { key: 'vehicle_type', label: 'Tipo de vehículo' },
   ]
 
   columns.push({
@@ -77,7 +77,7 @@ export default function VehicleList() {
         <Button
           onClick={(e) => {
             e.stopPropagation()
-            navigate(`/dashboard/vehicles/${row.matricula}`)
+            navigate(`/dashboard/vehicles/${row.plate}`)
           }}
           className="cursor-pointer"
         >
@@ -88,7 +88,7 @@ export default function VehicleList() {
             <Button
               onClick={(e) => {
                 e.stopPropagation()
-                handleEdit(row.matricula)
+                handleEdit(row.plate)
               }}
               className="cursor-pointer"
             >
@@ -149,7 +149,7 @@ export default function VehicleList() {
           <Table
             columns={columns}
             data={workshopVehicles}
-            onRowClick={(vehicle) => navigate(`/dashboard/vehicles/${vehicle.matricula}`)}
+            onRowClick={(vehicle) => navigate(`/dashboard/vehicles/${vehicle.plate}`)}
           />
         </CardContent>
       </Card>
@@ -164,7 +164,7 @@ export default function VehicleList() {
           <Table
             columns={columns}
             data={vehicles}
-            onRowClick={(vehicle) => navigate(`/dashboard/vehicles/${vehicle.matricula}`)}
+            onRowClick={(vehicle) => navigate(`/dashboard/vehicles/${vehicle.plate}`)}
           />
         </CardContent>
       </Card>
@@ -175,11 +175,11 @@ export default function VehicleList() {
           setDeleteModalOpen(false)
           setVehicleToDelete(null)
         }}
-        title={`Eliminar vehículo con matrícula  ${vehicleToDelete?.matricula}`}
+        title={`Eliminar vehículo con matrícula  ${vehicleToDelete?.plate}`}
       >
         <div className="space-y-4">
           <p className="text-secondary-700">
-            ¿Estás seguro de que deseas eliminar el <strong>{vehicleToDelete?.marca} {vehicleToDelete?.modelo}</strong> con matrícula <strong>{vehicleToDelete?.matricula}</strong>?
+            ¿Estás seguro de que deseas eliminar el <strong>{vehicleToDelete?.brand} {vehicleToDelete?.model}</strong> con matrícula <strong>{vehicleToDelete?.plate}</strong>?
           </p>
           <p className="text-secondary-700">
             En caso de que tenga registros de revisiones o usuarios asociados, estos también serán eliminados. Esta acción no se puede deshacer.

@@ -19,11 +19,11 @@ export default function EditVehicle() {
   const { plate } = useParams();
   const { user, isMechanic } = useAuth();
   const [form, setForm] = useState({
-    marca: "",
-    modelo: "",
-    matricula: "",
-    anyoFabricacion: "",
-    tipoVehiculo: "",
+    brand: "",
+    model: "",
+    plate: "",
+    fabrication_year: "",
+    vehicle_type: "",
   });
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -35,11 +35,11 @@ export default function EditVehicle() {
       try {
         const data = await api.vehicles.getByPlate(plate);
         setForm({
-          marca: data.marca || "",
-          modelo: data.modelo || "",
-          matricula: data.matricula || "",
-          anyoFabricacion: data.anyoFabricacion || "",
-          tipoVehiculo: data.tipoVehiculo || "",
+          brand: data.brand || "",
+          model: data.model || "",
+          plate: data.plate || "",
+          fabrication_year: data.fabrication_year || "",
+          vehicle_type: data.vehicle_type || "",
         });
       } catch (error) {
         addToast(error.message || "Error al cargar el vehículo", "error");
@@ -62,7 +62,7 @@ export default function EditVehicle() {
     try {
       await api.vehicle.update(plate, {
         ...form,
-        anyoFabricacion: parseInt(form.anyoFabricacion),
+        fabrication_year: parseInt(form.fabrication_year),
       });
       clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
       clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
@@ -107,7 +107,7 @@ export default function EditVehicle() {
           Editar vehículo
         </h1>
         <p className="text-secondary-500 mt-1">
-          Aquí puedes modificar los datos del vehículo con matrícula {form.matricula}.
+          Aquí puedes modificar los datos del vehículo con matrícula {form.plate}.
         </p>
       </div>
 
@@ -120,16 +120,16 @@ export default function EditVehicle() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Marca"
-                name="marca"
-                value={form.marca}
+                name="brand"
+                value={form.brand}
                 onChange={handleChange}
                 placeholder="Introduce la marca del vehículo"
                 required
               />
               <Input
                 label="Modelo"
-                name="modelo"
-                value={form.modelo}
+                name="model"
+                value={form.model}
                 onChange={handleChange}
                 placeholder="Introduce el modelo del vehículo"
                 required
@@ -138,8 +138,8 @@ export default function EditVehicle() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Matricula"
-                name="matricula"
-                value={form.matricula}
+                name="plate"
+                value={form.plate}
                 onChange={handleChange}
                 placeholder="Introduce la matrícula del vehículo"
                 required
@@ -147,9 +147,9 @@ export default function EditVehicle() {
               />
               <Input
                 label="Año de fabricación"
-                name="anyoFabricacion"
+                name="fabrication_year"
                 type="number"
-                value={form.anyoFabricacion}
+                value={form.fabrication_year}
                 onChange={handleChange}
                 placeholder="Introduce el año de fabricación"
                 required
@@ -157,8 +157,8 @@ export default function EditVehicle() {
             </div>
             <Select
               label="Tipo de vehículo"
-              name="tipoVehiculo"
-              value={form.tipoVehiculo}
+              name="vehicle_type"
+              value={form.vehicle_type}
               onChange={handleChange}
               options={vehicleTypes}
               required

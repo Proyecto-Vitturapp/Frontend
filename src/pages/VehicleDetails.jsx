@@ -38,13 +38,13 @@ export default function VehicleDetails() {
       setReviews(reviews)
       setVehicleUsers(Array.isArray(usersData) ? usersData : [])
 
-      const userIds = [...new Set(reviews.map(r => r.idCliente).filter(Boolean))]
+      const userIds = [...new Set(reviews.map(r => r.user_id).filter(Boolean))]
       const names = {}
       await Promise.all(
         userIds.map(async (id) => {
           try {
             const user = await api.users.getById(id)
-            names[id] = `${user.nombre} ${user.apellido || ''} ${user.segundoApellido || ''}`.trim()
+            names[id] = `${user.name} ${user.first_last_name || ''} ${user.second_last_name || ''}`.trim()
           } catch {
             names[id] = 'Usuario desconocido'
           }
@@ -61,7 +61,7 @@ export default function VehicleDetails() {
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     if (!isMechanic && userVehicles !== undefined && userVehicles !== null) {
-      const isOwner = userVehicles.some(v => v.matricula === plate)
+      const isOwner = userVehicles.some(v => v.plate === plate)
       setAuthorized(isOwner)
       if (!isOwner) {
         setLoading(false)
@@ -130,10 +130,10 @@ export default function VehicleDetails() {
           Volver a la lista de vehículos
           </button>
           <h1 className="text-2xl font-bold text-secondary-900">
-            {vehicle.marca} {vehicle.modelo} ({vehicle.matricula})
+            {vehicle.brand} {vehicle.model} ({vehicle.plate})
           </h1>
           <p className="text-secondary-500 mt-1">
-            Aquí puedes ver los datos del vehículo con matrícula {vehicle.matricula}.
+            Aquí puedes ver los datos del vehículo con matrícula {vehicle.plate}.
           </p>
         </div>
         {isMechanic && (
@@ -159,34 +159,34 @@ export default function VehicleDetails() {
             <dl className="space-y-4">
               <div>
                 <dt className="text-sm text-secondary-500">Marca</dt>
-                <dd className="text-sm font-medium text-secondary-900">{vehicle.marca}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.brand}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Modelo</dt>
-                <dd className="text-sm font-medium text-secondary-900">{vehicle.modelo}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.model}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Matrícula</dt>
-                <dd className="text-sm font-medium text-secondary-900">{vehicle.matricula}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.plate}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Año de fabricación</dt>
-                <dd className="text-sm font-medium text-secondary-900">{vehicle.anyoFabricacion}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.fabrication_year}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Tipo de vehículo</dt>
-                <dd className="text-sm font-medium text-secondary-900">{vehicle.tipoVehiculo}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.vehicle_type}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Fecha próxima revisión</dt>
-                <dd className="text-sm font-medium text-secondary-900">{vehicle.fechaProximoMantenimiento ? formatDate(vehicle.fechaProximoMantenimiento) : 'Sin fecha'}</dd>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.next_review_date ? formatDate(vehicle.next_review_date) : 'Sin fecha'}</dd>
               </div>
               <div>
                 <dt className="text-sm text-secondary-500">Usuarios con acceso</dt>
                 <dd className="text-sm font-medium text-secondary-900">
                   {vehicleUsers.length === 0
                     ? 'Ninguno'
-                    : vehicleUsers.map((u) => `${u.nombre} ${u.apellido || ''} ${u.segundoApellido || ''}`.trim()).join(', ')}
+                    : vehicleUsers.map((u) => `${u.name} ${u.first_last_name || ''} ${u.second_last_name || ''}`.trim()).join(', ')}
                 </dd>
               </div>
             </dl>
@@ -201,33 +201,33 @@ export default function VehicleDetails() {
             {reviews.length === 0 ? (
               <ErrorScreen
                 title="No hay revisiones"
-                message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
+                message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.plate}`}
                 icon="file"
               />
             ) : (
               <div className="space-y-4">
                 {reviews.map((revision) => (
                   <div
-                    key={revision.idRevision}
+                    key={revision.review_id}
                     className="p-4 border border-secondary-200 rounded-lg hover:border-primary-200 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-secondary-900">
-                        {revision.fechaRevision ? formatDate(revision.fechaRevision) : 'Sin fecha'}
-                        {revision.idCliente && userNames[revision.idCliente] && (
+                        {revision.review_date ? formatDate(revision.review_date) : 'Sin fecha'}
+                        {revision.user_id && userNames[revision.user_id] && (
                           <span className="font-normal text-secondary-500 ml-2">
-                            por {userNames[revision.idCliente]}
+                            por {userNames[revision.user_id]}
                           </span>
                         )}
                       </span>
                       {revision.kilometrajeActual && (
-                        <Badge variant="primary">{revision.kilometrajeActual.toLocaleString()} km</Badge>
+                        <Badge variant="primary">{revision.actual_km.toLocaleString()} km</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-secondary-600">{revision.diagnosticoResultado}</p>
-                    {revision.importe && (
+                    <p className="text-sm text-secondary-600">{revision.review_note}</p>
+                    {revision.import && (
                       <p className="text-sm font-medium text-primary-600 mt-2">
-                        {revision.importe.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+                        {revision.import.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
                       </p>
                     )}
                   </div>
