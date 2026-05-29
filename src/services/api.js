@@ -57,7 +57,7 @@ export const api = {
     getById: (id) => request(`/review/${id}`),
   },
   review: {
-    create: (data) => request("/revisiones", { method: "POST", body: data }),
+    create: (data) => request("/review/new", { method: "POST", body: data }),
     update: (id, data) => request(`/revisiones/${id}`, { method: "PUT", body: data }),
     delete: (id) => request(`/revisiones/${id}`, { method: "DELETE" }),
   }, 
