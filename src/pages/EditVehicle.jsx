@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../components/ui";
+import { useAuth } from "../context/AuthContext";
 import { api } from "../services/api";
+import { clearCacheKey } from "../hooks/useApiCache";
 import {
   Card,
   CardContent,
@@ -15,6 +17,7 @@ import { Undo2 } from "lucide-react";
 
 export default function EditVehicle() {
   const { plate } = useParams();
+  const { user, isMechanic } = useAuth();
   const [form, setForm] = useState({
     marca: "",
     modelo: "",
@@ -61,8 +64,10 @@ export default function EditVehicle() {
         ...form,
         anyoFabricacion: parseInt(form.anyoFabricacion),
       });
+      clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
+      clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
       addToast("Vehículo actualizado correctamente", "success");
-      navigate("/dashboard/vehicles");
+      navigate(`/dashboard/vehicles/${plate}`);
     } catch (error) {
       addToast(error.message || "Error al actualizar el vehículo", "error");
     } finally {
@@ -165,7 +170,7 @@ export default function EditVehicle() {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate("/dashboard/vehicles")}
+                onClick={() => navigate(`/dashboard/vehicles/${plate}`)}
               >
                 Cancelar
               </Button>

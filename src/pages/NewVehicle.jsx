@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../components/ui";
+import { useAuth } from "../context/AuthContext";
 import { api } from "../services/api";
+import { clearCacheKey } from "../hooks/useApiCache";
 import {
   Card,
   CardContent,
@@ -22,6 +24,7 @@ export default function NewVehicle() {
     tipoVehiculo: "",
   });
   const [loading, setLoading] = useState(false);
+  const { user, isMechanic } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -37,6 +40,8 @@ export default function NewVehicle() {
         ...form,
         anyoFabricacion: parseInt(form.anyoFabricacion),
       });
+      clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
+      clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
       addToast("Vehiculo creado correctamente", "success");
       navigate("/dashboard/vehicles");
     } catch (error) {
