@@ -43,7 +43,7 @@ export default function NewVehicle() {
       clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
       clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
       addToast("Vehiculo creado correctamente", "success");
-      navigate("/dashboard/vehicles");
+      navigate(`/dashboard/vehicles/${form.plate}`);
     } catch (error) {
       addToast(error.message || "Error al crear el vehiculo", "error");
     } finally {
