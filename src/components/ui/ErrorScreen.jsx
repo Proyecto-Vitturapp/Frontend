@@ -5,6 +5,7 @@ import {
   ShieldAlert,
   FileX,
   WifiOff,
+  Plus,
 } from "lucide-react";
 import { Button } from "./Button";
 
@@ -13,14 +14,16 @@ const icons = {
   shield: ShieldAlert,
   file: FileX,
   wifi: WifiOff,
+  plus: Plus,
 };
 
 export function ErrorScreen({
-  title = "Algo salió mal",
+  title = "Algo ha salido mal",
   message = "Ha ocurrido un error inesperado",
   icon = "warning",
-  backRoute = "/dashboard",
-  backLabel = "Volver al inicio",
+  buttonRoute = "/dashboard",
+  buttonLabel = "Volver al inicio",
+  buttonIcon: ButtonIcon = ArrowLeft,
 }) {
   const navigate = useNavigate();
   const Icon = icons[icon] || icons.warning;
@@ -32,9 +35,9 @@ export function ErrorScreen({
       </div>
       <h1 className="text-2xl font-bold text-secondary-900 mb-2">{title}</h1>
       <p className="text-secondary-500 max-w-lg mb-8">{message}</p>
-      <Button variant="primary" size="lg" onClick={() => navigate(backRoute)}>
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        {backLabel}
+      <Button variant="primary" size="lg" onClick={() => navigate(buttonRoute)}>
+        {ButtonIcon && <ButtonIcon className="w-4 h-4 mr-2" />}
+        {buttonLabel}
       </Button>
     </div>
   );
