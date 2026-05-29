@@ -148,6 +148,10 @@ export default function VehicleDetail() {
                 <dt className="text-sm text-secondary-500">Tipo de vehículo</dt>
                 <dd className="text-sm font-medium text-secondary-900">{vehicle.tipoVehiculo}</dd>
               </div>
+              <div>
+                <dt className="text-sm text-secondary-500">Fecha próxima revisión</dt>
+                <dd className="text-sm font-medium text-secondary-900">{vehicle.fechaProximoMantenimiento ? formatDate(vehicle.fechaProximoMantenimiento) : 'Sin fecha'}</dd>
+              </div>
             </dl>
           </CardContent>
         </Card>
