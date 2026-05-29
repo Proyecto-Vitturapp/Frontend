@@ -105,12 +105,12 @@ export default function VehicleDetails() {
   if (!vehicle) {
     return (
       <ErrorScreen
-          title="Sin revisiones"
-          message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
+          title="Vehículo no encontrado"
+          message={`No se ha encontrado el vehículo con matrícula ${plate}`}
           icon="file"
-          buttonRoute={`/dashboard/vehicles/${vehicle.matricula}/revision/new`}
-          buttonLabel="Nueva revisión"
-          buttonIcon={Plus}
+          buttonRoute="/dashboard/vehicles"
+          buttonLabel="Volver a la lista de vehículos"
+          buttonIcon={Undo2}
       />
     )
   }
