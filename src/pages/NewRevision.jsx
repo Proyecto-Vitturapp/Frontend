@@ -1,46 +1,68 @@
-import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useToast } from '../components/ui'
-import { api } from '../services/api'
-import { Card, CardContent, CardHeader, CardTitle, Input, Textarea, Button } from '../components/ui'
-import { Undo2 } from 'lucide-react'
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../components/ui";
+import { api } from "../services/api";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  Textarea,
+  Button,
+} from "../components/ui";
+import { Undo2 } from "lucide-react";
 
 export default function NewRevision() {
-  const { plate } = useParams()
-  const navigate = useNavigate()
-  const { addToast } = useToast()
+  const { plate } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { addToast } = useToast();
 
   const [form, setForm] = useState({
-    fecha: new Date().toISOString().split('T')[0],
-    tipo: '',
-    descripcion: '',
-    coste: '',
-    km: '',
-  })
-  const [loading, setLoading] = useState(false)
+    fecha: new Date().toISOString().split("T")[0],
+    tipo: "",
+    descripcion: "",
+    coste: "",
+    km: "",
+    proximaRevision: "",
+  });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
     try {
-      await api.review.create({
+      const formatDate = (dateStr) => {
+        if (!dateStr) return null
+        const [year, month, day] = dateStr.split("-")
+        return `${day}-${month}-${year}`
+      }
+
+      const payload = {
         matricula: plate,
-        ...form,
-        coste: parseFloat(form.coste) || 0,
-        km: parseInt(form.km) || 0,
-      })
-      addToast('Revision registrada correctamente', 'success')
-      navigate(`/dashboard/vehicles/${plate}`)
+        idUsuario: user.id,
+        fechaRevision: formatDate(form.fecha),
+        kilometrajeActual: parseInt(form.km) || 0,
+        diagnosticoResultado: form.descripcion,
+        importe: parseFloat(form.coste) || 0,
+        fechaProximoMantenimiento: formatDate(form.proximaRevision),
+      }
+      console.log('Payload:', JSON.stringify(payload, null, 2))
+      await api.review.create(payload);
+      addToast("Revision registrada correctamente", "success");
+      navigate(`/dashboard/vehicles/${plate}`);
     } catch (error) {
-      addToast(error.message || 'Error al registrar la revision', 'error')
+      addToast(error.message || "Error al registrar la revision", "error");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -52,8 +74,12 @@ export default function NewRevision() {
           <Undo2 className="w-4 h-4 mr-2" />
           Volver a los detalles del vehículo
         </button>
-        <h1 className="text-2xl font-bold text-secondary-900">Nueva revisión</h1>
-        <p className="text-secondary-500 mt-1">Aquí puedes registrar una nueva revisión para el vehículo con matrícula {plate}</p>
+        <h1 className="text-2xl font-bold text-secondary-900">
+          Nueva revisión
+        </h1>
+        <p className="text-secondary-500 mt-1">
+          Aquí puedes registrar una nueva revisión para el vehículo conmatrícula {plate}
+        </p>
       </div>
 
       <Card>
@@ -62,7 +88,7 @@ export default function NewRevision() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Fecha"
                 name="fecha"
@@ -79,6 +105,8 @@ export default function NewRevision() {
                 onChange={handleChange}
                 placeholder="Introduce el coste en euros (€)"
               />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Kilómetros actuales"
                 name="km"
@@ -87,7 +115,16 @@ export default function NewRevision() {
                 onChange={handleChange}
                 placeholder="Introduce los kilómetros actuales del vehículo"
               />
+              <Input
+                label="Próxima revisión"
+                name="proximaRevision"
+                type="date"
+                value={form.proximaRevision}
+                onChange={handleChange}
+                placeholder="Selecciona la fecha de la próxima revisión"
+              />
             </div>
+
             <Textarea
               label="Descripción"
               name="descripcion"
@@ -98,9 +135,13 @@ export default function NewRevision() {
             />
             <div className="flex gap-3 pt-4">
               <Button type="submit" variant="primary" disabled={loading}>
-                {loading ? 'Registrando...' : 'Registrar revisión'}
+                {loading ? "Registrando..." : "Registrar revisión"}
               </Button>
-              <Button type="button" variant="secondary" onClick={() => navigate(`/dashboard/vehicles/${plate}`)}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(`/dashboard/vehicles/${plate}`)}
+              >
                 Cancelar
               </Button>
             </div>
@@ -108,5 +149,5 @@ export default function NewRevision() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
