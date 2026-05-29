@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../components/ui";
 import { api } from "../services/api";
+import { clearCacheKey } from "../hooks/useApiCache";
 import {
   Card,
   CardContent,
@@ -17,7 +18,7 @@ import { Undo2 } from "lucide-react";
 export default function NewReview() {
   const { plate } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isMechanic } = useAuth();
   const { addToast } = useToast();
 
   const [form, setForm] = useState({
@@ -55,6 +56,8 @@ export default function NewReview() {
       }
       console.log('Payload:', JSON.stringify(payload, null, 2))
       await api.review.create(payload);
+      clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
+      clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
       addToast("Revision registrada correctamente", "success");
       navigate(`/dashboard/vehicles/${plate}`);
     } catch (error) {
