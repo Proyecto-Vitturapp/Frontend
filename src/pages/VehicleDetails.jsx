@@ -195,7 +195,7 @@ export default function VehicleDetails() {
                     <p className="text-sm text-secondary-600">{revision.diagnosticoResultado}</p>
                     {revision.importe && (
                       <p className="text-sm font-medium text-primary-600 mt-2">
-                        {revision.importe.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} EUR
+                        {revision.importe.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
                       </p>
                     )}
                   </div>
