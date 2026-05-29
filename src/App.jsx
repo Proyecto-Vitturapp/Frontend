@@ -10,6 +10,7 @@ import VehicleDetails from './pages/VehicleDetails'
 import NewVehicle from './pages/NewVehicle'
 import EditVehicle from './pages/EditVehicle'
 import NewReview from './pages/NewReview'
+import UserList from './pages/UserList'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             >
               <Route index element={<Home />} />
               <Route path="vehicles" element={<VehicleList />} />
+              <Route path="users" element={<UserList />} />
               <Route path="vehicles/:plate" element={<VehicleDetails />} />
               <Route
                 path="vehicles/new"
