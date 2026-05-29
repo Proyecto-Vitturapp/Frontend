@@ -143,7 +143,8 @@ export default function EditVehicle() {
                 onChange={handleChange}
                 placeholder="Introduce la matrícula del vehículo"
                 required
-                disabled
+                readOnly
+                className="bg-secondary-100 cursor-not-allowed"
               />
               <Input
                 label="Año de fabricación"

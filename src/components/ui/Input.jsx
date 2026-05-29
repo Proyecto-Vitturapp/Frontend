@@ -1,4 +1,4 @@
-export function Input({ label, type = 'text', value, onChange, placeholder, error, required = false, ...props }) {
+export function Input({ label, type = 'text', value, onChange, placeholder, error, required = false, className = '', ...props }) {
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
@@ -15,7 +15,7 @@ export function Input({ label, type = 'text', value, onChange, placeholder, erro
         required={required}
         className={`px-3 py-2 border rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
           error ? 'border-error' : 'border-secondary-300'
-        }`}
+        } ${className}`}
         {...props}
       />
       {error && <span className="text-xs text-error">{error}</span>}
