@@ -180,11 +180,11 @@ export default function Home() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Actividad Reciente</CardTitle>
+          <CardTitle>Sin uso</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-secondary-500 text-sm">
-            Conecta la API para ver la actividad reciente aqui.
+            Sin uso todavía
           </p>
         </CardContent>
       </Card>
