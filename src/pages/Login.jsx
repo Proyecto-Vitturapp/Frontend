@@ -28,15 +28,14 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <img src="/vitturapp-logo.png" alt="VitturApp" className="mx-auto w-24 h-24" />
-          <h1 className="text-3xl font-bold text-white">VitturApp</h1>
-          <p className="text-white mt-1">Todo el historial de tus vehículos, en un solo lugar</p>
-        </div>
-
+      <div className="w-full max-w-xl">
         <Card>
           <CardHeader>
+            <div className="text-center mb-5">
+              <img src="/vitturapp-logo.png" alt="VitturApp" className="mx-auto w-24 h-24" />
+              <h1 className="text-3xl font-bold text-primary-500">VitturApp</h1>
+              <p className="text-primary-500 mt-1">Todo el historial de tus vehículos, en un solo lugar</p>
+            </div>
             <CardTitle>Iniciar sesión</CardTitle>
           </CardHeader>
           <CardContent>
