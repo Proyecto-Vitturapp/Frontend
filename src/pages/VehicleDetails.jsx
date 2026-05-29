@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, Badge, Button, ErrorScreen } 
 import { Undo2, Plus } from 'lucide-react'
 import { useApiCache } from '../hooks/useApiCache'
 
-export default function VehicleDetail() {
+export default function VehicleDetails() {
   const { plate } = useParams()
   const navigate = useNavigate()
   const { user, isMechanic } = useAuth()

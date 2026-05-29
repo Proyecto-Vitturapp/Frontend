@@ -14,7 +14,7 @@ import {
 } from "../components/ui";
 import { Undo2 } from "lucide-react";
 
-export default function NewRevision() {
+export default function NewReview() {
   const { plate } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();

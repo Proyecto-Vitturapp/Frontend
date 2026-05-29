@@ -6,9 +6,9 @@ import Login from './pages/Login'
 import Sidebar from './components/Sidebar'
 import Home from './pages/Home'
 import VehicleList from './pages/VehicleList'
-import VehicleDetail from './pages/VehicleDetail'
+import VehicleDetails from './pages/VehicleDetails'
 import NewVehicle from './pages/NewVehicle'
-import NewRevision from './pages/NewRevision'
+import NewReview from './pages/NewReview'
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
             >
               <Route index element={<Home />} />
               <Route path="vehicles" element={<VehicleList />} />
-              <Route path="vehicles/:plate" element={<VehicleDetail />} />
+              <Route path="vehicles/:plate" element={<VehicleDetails />} />
               <Route
                 path="vehicles/new"
                 element={
@@ -40,7 +40,7 @@ function App() {
                 path="vehicles/:plate/revision/new"
                 element={
                   <ProtectedRoute mechanicOnly>
-                    <NewRevision />
+                    <NewReview />
                   </ProtectedRoute>
                 }
               />
