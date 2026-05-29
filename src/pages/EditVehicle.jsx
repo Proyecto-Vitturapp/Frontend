@@ -71,13 +71,13 @@ export default function EditVehicle() {
   };
 
   const vehicleTypes = [
-    { value: "TURISMO", label: "Turismo" },
-    { value: "MOTOCICLETA", label: "Motocicleta" },
-    { value: "CAMION", label: "Camion" },
-    { value: "FURGONETA", label: "Furgoneta" },
-    { value: "AUTOBUS", label: "Autobus" },
-    { value: "REMOLQUE", label: "Remolque" },
-    { value: "OTRO", label: "Otro" },
+    { value: "Turismo", label: "Turismo" },
+    { value: "Motocicleta", label: "Motocicleta" },
+    { value: "Camión", label: "Camion" },
+    { value: "Furgoneta", label: "Furgoneta" },
+    { value: "Autobús", label: "Autobus" },
+    { value: "Remolque", label: "Remolque" },
+    { value: "Otro", label: "Otro" },
   ];
 
   if (fetching) {
