@@ -32,7 +32,7 @@ export default function Login() {
         <Card>
           <CardHeader>
             <div className="text-center mb-5">
-              <img src="/vitturapp-logo.png" alt="VitturApp" className="mx-auto w-24 h-24" />
+              <img src="/vitturapp-logo.png" alt="VitturApp" className="mx-auto w-20 h-20" />
               <h1 className="text-3xl font-bold text-primary-500">VitturApp</h1>
               <p className="text-primary-500 mt-1">Todo el historial de tus vehículos, en un solo lugar</p>
             </div>
