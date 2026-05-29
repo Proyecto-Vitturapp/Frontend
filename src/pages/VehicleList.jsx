@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../comp
 import { Modal } from '../components/ui/Modal'
 import { api } from '../services/api'
 import { useApiCache } from '../hooks/useApiCache'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Eye, Pencil, Trash2 } from 'lucide-react'
 
 export default function VehicleList() {
   const { user, isMechanic } = useAuth()
@@ -69,33 +69,45 @@ export default function VehicleList() {
     { key: 'tipoVehiculo', label: 'Tipo de vehículo' },
   ]
 
-  if (isMechanic) {
-    columns.push({
-      key: 'actions',
-      label: 'Acciones',
-      render: (_, row) => (
-        <div className="flex gap-2">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleEdit(row.matricula)
-            }}
-          >
-            <Pencil className="w-3 h-3" />
-          </Button>
-          <Button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleDeleteClick(row)
-            }}
-            className="text-xs px-3 py-1 bg-red-500 hover:bg-red-600"
-          >
-            <Trash2 className="w-3 h-3" />
-          </Button>
-        </div>
-      )
-    })
-  }
+  columns.push({
+    key: 'actions',
+    label: 'Acciones',
+    render: (_, row) => (
+      <div className="flex gap-2">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation()
+            navigate(`/dashboard/vehicles/${row.matricula}`)
+          }}
+          className="cursor-pointer"
+        >
+          <Eye className="w-3 h-3" />
+        </Button>
+        {isMechanic && (
+          <>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleEdit(row.matricula)
+              }}
+              className="cursor-pointer"
+            >
+              <Pencil className="w-3 h-3" />
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleDeleteClick(row)
+              }}
+              className="text-xs px-3 py-1 bg-red-500 hover:bg-red-600 cursor-pointer"
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </>
+        )}
+      </div>
+    )
+  })
 
   if (loading) {
     return (
