@@ -21,9 +21,9 @@ export function ErrorScreen({
   title = "Algo ha salido mal",
   message = "Ha ocurrido un error inesperado",
   icon = "warning",
-  buttonRoute = "/dashboard",
-  buttonLabel = "Volver al inicio",
-  buttonIcon: ButtonIcon = ArrowLeft,
+  buttonRoute,
+  buttonLabel,
+  buttonIcon: ButtonIcon,
 }) {
   const navigate = useNavigate();
   const Icon = icons[icon] || icons.warning;
@@ -35,10 +35,12 @@ export function ErrorScreen({
       </div>
       <h1 className="text-2xl font-bold text-secondary-900 mb-2">{title}</h1>
       <p className="text-secondary-500 max-w-lg mb-8">{message}</p>
-      <Button variant="primary" size="lg" onClick={() => navigate(buttonRoute)}>
-        {ButtonIcon && <ButtonIcon className="w-4 h-4 mr-2" />}
-        {buttonLabel}
-      </Button>
+      {buttonLabel && (
+        <Button variant="primary" size="lg" onClick={() => navigate(buttonRoute)}>
+          {ButtonIcon && <ButtonIcon className="w-4 h-4 mr-2" />}
+          {buttonLabel}
+        </Button>
+      )}
     </div>
   );
 }

@@ -167,9 +167,6 @@ export default function VehicleDetails() {
                 title="No hay revisiones"
                 message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
                 icon="file"
-                buttonRoute={`/dashboard/vehicles/${vehicle.matricula}/revision/new`}
-                buttonLabel="Nueva revisión"
-                buttonIcon={Plus}
               />
             ) : (
               <div className="space-y-4">
