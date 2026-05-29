@@ -80,21 +80,22 @@ export default function VehicleDetails() {
         title="Permisos insuficientes"
         message="No puedes ver los detalles de los vehículos que no son de tu propiedad"
         icon="shield"
-        backRoute="/dashboard/vehicles"
-        backLabel="Volver a la lista de vehículos"
+        buttonRoute="/dashboard/vehicles"
+        buttonLabel="Volver a la lista de vehículos"
       />
     )
   }
 
   if (!vehicle) {
     return (
-      <ErrorScreen
-        title="Vehículo no encontrado"
-        message="El vehículo que buscas no existe en el sistema"
-        icon="file"
-        backRoute="/dashboard/vehicles"
-        backLabel="Volver a la lista de vehículos"
-      />
+              <ErrorScreen
+                title="Sin revisiones"
+                message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
+                icon="file"
+                buttonRoute={`/dashboard/vehicles/${vehicle.matricula}/revision/new`}
+                buttonLabel="Nueva revisión"
+                buttonIcon={Plus}
+              />
     )
   }
 
@@ -122,11 +123,11 @@ export default function VehicleDetails() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-1">
+        <Card className="lg:col-span-1 h-[calc(100vh-10rem)] flex flex-col">
           <CardHeader>
             <CardTitle>Información del vehículo</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1 overflow-y-auto">
             <dl className="space-y-4">
               <div>
                 <dt className="text-sm text-secondary-500">Marca</dt>
@@ -156,15 +157,20 @@ export default function VehicleDetails() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 h-[calc(100vh-10rem)] flex flex-col">
           <CardHeader>
             <CardTitle>Historial de revisiones ({reviews.length})</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1 overflow-y-auto">
             {reviews.length === 0 ? (
-              <p className="text-secondary-500 text-sm text-center py-8">
-                No hay revisiones registradas
-              </p>
+              <ErrorScreen
+                title="No hay revisiones"
+                message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
+                icon="file"
+                buttonRoute={`/dashboard/vehicles/${vehicle.matricula}/revision/new`}
+                buttonLabel="Nueva revisión"
+                buttonIcon={Plus}
+              />
             ) : (
               <div className="space-y-4">
                 {reviews.map((revision) => (
