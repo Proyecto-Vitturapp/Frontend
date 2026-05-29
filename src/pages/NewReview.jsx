@@ -58,10 +58,10 @@ export default function NewReview() {
       await api.review.create(payload);
       clearCacheKey(isMechanic ? "vehicles-all" : `vehicles-user-${user?.id}`);
       clearCacheKey(isMechanic ? "vehicles-workshop" : `vehicles-workshop-user-${user?.id}`);
-      addToast("Revision registrada correctamente", "success");
+      addToast("Revisión registrada correctamente", "success");
       navigate(`/dashboard/vehicles/${plate}`);
     } catch (error) {
-      addToast(error.message || "Error al registrar la revision", "error");
+      addToast(error.message || "Error al registrar la revisión", "error");
     } finally {
       setLoading(false);
     }
