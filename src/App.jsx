@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import VehicleList from './pages/VehicleList'
 import VehicleDetails from './pages/VehicleDetails'
 import NewVehicle from './pages/NewVehicle'
+import EditVehicle from './pages/EditVehicle'
 import NewReview from './pages/NewReview'
 
 function App() {
@@ -33,6 +34,14 @@ function App() {
                 element={
                   <ProtectedRoute mechanicOnly>
                     <NewVehicle />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="vehicles/update/:plate"
+                element={
+                  <ProtectedRoute mechanicOnly>
+                    <EditVehicle />
                   </ProtectedRoute>
                 }
               />

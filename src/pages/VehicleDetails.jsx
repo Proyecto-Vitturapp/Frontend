@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, ErrorScreen } from '../components/ui'
-import { Undo2, Plus } from 'lucide-react'
+import { Undo2, Plus, Pencil } from 'lucide-react'
 import { useApiCache } from '../hooks/useApiCache'
 
 export default function VehicleDetails() {
@@ -88,14 +88,14 @@ export default function VehicleDetails() {
 
   if (!vehicle) {
     return (
-              <ErrorScreen
-                title="Sin revisiones"
-                message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
-                icon="file"
-                buttonRoute={`/dashboard/vehicles/${vehicle.matricula}/revision/new`}
-                buttonLabel="Nueva revisión"
-                buttonIcon={Plus}
-              />
+      <ErrorScreen
+          title="Sin revisiones"
+          message={`No hay revisiones registradas para el vehículo con matrícula ${vehicle.matricula}`}
+          icon="file"
+          buttonRoute={`/dashboard/vehicles/${vehicle.matricula}/revision/new`}
+          buttonLabel="Nueva revisión"
+          buttonIcon={Plus}
+      />
     )
   }
 
@@ -113,12 +113,21 @@ export default function VehicleDetails() {
           <h1 className="text-2xl font-bold text-secondary-900">
             {vehicle.marca} {vehicle.modelo} ({vehicle.matricula})
           </h1>
+          <p className="text-secondary-500 mt-1">
+            Aquí puedes ver los datos del vehículo con matrícula {vehicle.matricula}.
+          </p>
         </div>
         {isMechanic && (
-          <Button onClick={() => navigate(`/dashboard/vehicles/${plate}/revision/new`)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Nueva revisión
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => navigate(`/dashboard/vehicles/update/${plate}`)}>
+              <Pencil className="w-4 h-4 mr-2" />
+              Editar vehículo
+            </Button>
+            <Button onClick={() => navigate(`/dashboard/vehicles/${plate}/revision/new`)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Nueva revisión
+            </Button>
+          </div>
         )}
       </div>
 

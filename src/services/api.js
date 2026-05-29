@@ -29,7 +29,8 @@ async function request(endpoint, options = {}) {
     throw new Error(error.message || `Error ${response.status}`);
   }
 
-  return response.json();
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 }
 
 export const api = {
@@ -47,8 +48,8 @@ export const api = {
   },
   vehicle: {
     create: (data) => request("/vehicle/new", { method: "POST", body: data }),
-    update: (plate, data) => request(`/vehicles/${plate}`, { method: "PUT", body: data }),
-    delete: (plate) => request(`/vehicles/${plate}`, { method: "DELETE" }),
+    update: (plate, data) => request(`/vehicle/update/${plate}`, { method: "PUT", body: data }),
+    delete: (plate) => request(`/vehicle/delete/${plate}`, { method: "DELETE" }),
   },
   reviews: {
     getAll: () => request("/reviews/all"),

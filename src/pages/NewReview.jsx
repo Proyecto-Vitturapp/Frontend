@@ -69,7 +69,7 @@ export default function NewReview() {
       <div>
         <button
           onClick={() => navigate(`/dashboard/vehicles/${plate}`)}
-          className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1"
+          className="text-sm text-secondary-500 hover:text-secondary-700 mb-2 flex items-center gap-1 cursor-pointer"
         >
           <Undo2 className="w-4 h-4 mr-2" />
           Volver a los detalles del vehículo

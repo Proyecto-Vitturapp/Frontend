@@ -1,29 +1,56 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../components/ui'
+import { Modal } from '../components/ui/Modal'
 import { api } from '../services/api'
 import { useApiCache } from '../hooks/useApiCache'
+import { Pencil, Trash2 } from 'lucide-react'
 
 export default function VehicleList() {
   const { user, isMechanic } = useAuth()
   const navigate = useNavigate()
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [vehicleToDelete, setVehicleToDelete] = useState(null)
 
   const vehiclesKey = isMechanic ? 'vehicles-all' : `vehicles-user-${user?.id}`
   const workshopKey = isMechanic ? 'vehicles-workshop' : `vehicles-workshop-user-${user?.id}`
 
-  const { data: vehicles = [], loading: vehiclesLoading } = useApiCache(
+  const { data: vehicles = [], loading: vehiclesLoading, refresh: refreshVehicles } = useApiCache(
     vehiclesKey,
     () => isMechanic ? api.vehicles.getAll() : api.vehicles.getAllUserVehicles(user.id),
     !!user
   )
 
-  const { data: workshopVehicles = [], loading: workshopLoading } = useApiCache(
+  const { data: workshopVehicles = [], loading: workshopLoading, refresh: refreshWorkshopVehicles } = useApiCache(
     workshopKey,
     () => isMechanic ? api.vehicles.getInWorkshop() : api.vehicles.getInWorkshopUserVehicles(user.id),
     !!user
   )
 
   const loading = vehiclesLoading || workshopLoading
+
+  const handleEdit = (plate) => {
+    navigate(`/dashboard/vehicles/update/${plate}`)
+  }
+
+  const handleDeleteClick = (vehicle) => {
+    setVehicleToDelete(vehicle)
+    setDeleteModalOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!vehicleToDelete) return
+    try {
+      await api.vehicle.delete(vehicleToDelete.matricula)
+      setDeleteModalOpen(false)
+      setVehicleToDelete(null)
+      refreshVehicles()
+      refreshWorkshopVehicles()
+    } catch (error) {
+      console.error('Error al eliminar vehículo:', error)
+    }
+  }
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('es-ES', {
@@ -41,6 +68,34 @@ export default function VehicleList() {
     { key: 'fechaProximoMantenimiento', label: 'Fecha próxima revisión', render: (value) => value ? formatDate(value) : 'Sin fecha' },
     { key: 'tipoVehiculo', label: 'Tipo de vehículo' },
   ]
+
+  if (isMechanic) {
+    columns.push({
+      key: 'actions',
+      label: 'Acciones',
+      render: (_, row) => (
+        <div className="flex gap-2">
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              handleEdit(row.matricula)
+            }}
+          >
+            <Pencil className="w-3 h-3" />
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              handleDeleteClick(row)
+            }}
+            className="text-xs px-3 py-1 bg-red-500 hover:bg-red-600"
+          >
+            <Trash2 className="w-3 h-3" />
+          </Button>
+        </div>
+      )
+    })
+  }
 
   if (loading) {
     return (
@@ -98,6 +153,41 @@ export default function VehicleList() {
           />
         </CardContent>
       </Card>
+
+      <Modal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false)
+          setVehicleToDelete(null)
+        }}
+        title={`Eliminar vehículo con matrícula  ${vehicleToDelete?.matricula}`}
+      >
+        <div className="space-y-4">
+          <p className="text-secondary-700">
+            ¿Estás seguro de que deseas eliminar el <strong>{vehicleToDelete?.marca} {vehicleToDelete?.modelo}</strong> con matrícula <strong>{vehicleToDelete?.matricula}</strong>?
+          </p>
+          <p className="text-secondary-700">
+            En caso de que tenga registros de revisiones o usuarios asociados, estos también serán eliminados. Esta acción no se puede deshacer.
+          </p>
+          <div className="flex gap-3 justify-end">
+            <Button
+              onClick={() => {
+                setDeleteModalOpen(false)
+                setVehicleToDelete(null)
+              }}
+              variant="secondary"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleDeleteConfirm}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              Eliminar
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
