@@ -12,6 +12,7 @@ import EditVehicle from './pages/EditVehicle'
 import NewReview from './pages/NewReview'
 import UserList from './pages/UserList'
 import NewUser from './pages/NewUser'
+import EditUser from './pages/EditUser'
 
 function App() {
   return (
@@ -61,6 +62,14 @@ function App() {
                 element={
                   <ProtectedRoute mechanicOnly>
                     <NewUser />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="users/update/:id"
+                element={
+                  <ProtectedRoute mechanicOnly>
+                    <EditUser />
                   </ProtectedRoute>
                 }
               />
