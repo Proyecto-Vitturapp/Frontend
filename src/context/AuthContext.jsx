@@ -53,8 +53,8 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (username, password) => {
     const data = await api.auth.login({ username, password })
     localStorage.setItem('token', data.token)
-    localStorage.setItem('userId', data.userId)
-    await fetchUser(data.userId)
+    localStorage.setItem('userId', data.user_id)
+    await fetchUser(data.user_id)
     return data
   }, [fetchUser])
 
