@@ -11,6 +11,7 @@ import NewVehicle from './pages/NewVehicle'
 import EditVehicle from './pages/EditVehicle'
 import NewReview from './pages/NewReview'
 import UserList from './pages/UserList'
+import NewUser from './pages/NewUser'
 
 function App() {
   return (
@@ -52,6 +53,14 @@ function App() {
                 element={
                   <ProtectedRoute mechanicOnly>
                     <NewReview />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="users/new"
+                element={
+                  <ProtectedRoute mechanicOnly>
+                    <NewUser />
                   </ProtectedRoute>
                 }
               />

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, Table, Button } from '../comp
 import { Modal } from '../components/ui/Modal'
 import { api } from '../services/api'
 import { useApiCache } from '../hooks/useApiCache'
-import { Eye, Pencil, Trash2, Users } from 'lucide-react'
+import { Eye, Pencil, Trash2, Users, Plus } from 'lucide-react'
 
 export default function UserList() {
   const { user, isMechanic } = useAuth()
@@ -51,11 +51,12 @@ export default function UserList() {
   }
 
   const columns = [
-    { key: 'name', label: 'Nombre' },
-    { key: 'first_last_name', label: 'Apellido' },
     { key: 'username', label: 'Username' },
+    { key: 'name', label: 'Nombre' },
+    { key: 'apellidos', label: 'Apellidos', render: (_, row) => `${row.first_last_name}${row.second_last_name ? ' ' + row.second_last_name : ''}` },
     { key: 'email', label: 'Email' },
     { key: 'phone_number', label: 'Teléfono' },
+    { key: 'role', label: 'Rol', render: (value) => value === 1 ? 'Mecánico' : 'Cliente' },
     { key: 'creation_date', label: 'Fecha de creación', render: (value) => value ? formatDate(value) : 'Sin fecha' },
   ]
 
@@ -119,9 +120,7 @@ export default function UserList() {
         </div>
         {isMechanic && (
           <Button onClick={() => navigate('/dashboard/users/new')}>
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
+            <Plus className="w-4 h-4 mr-2" />
             Nuevo usuario
           </Button>
         )}
