@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { LogOut } from 'lucide-react';
-import { CarFront, House } from 'lucide-react';
+import { CarFront, House, Users } from 'lucide-react';
 
 export default function Sidebar() {
   const { user, logout, isMechanic } = useAuth()
@@ -13,6 +13,7 @@ export default function Sidebar() {
   const navItems = [
     { path: '/dashboard', label: 'Inicio', icon: 'home' },
     { path: '/dashboard/vehicles', label: 'Vehículos', icon: 'car' },
+    ...(isMechanic ? [{ path: '/dashboard/users', label: 'Usuarios', icon: 'users' }] : []),
   ]
 
   const handleLogout = () => {
@@ -27,6 +28,9 @@ export default function Sidebar() {
       ),
       car: (
         <CarFront className="w-5 h-5" />
+      ),
+      users: (
+        <Users className="w-5 h-5" />
       ),
     }
     return icons[icon]
