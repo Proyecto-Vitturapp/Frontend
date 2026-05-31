@@ -66,8 +66,8 @@ export const api = {
     getAll: () => request("/users/all"),
     getAllTotal: () => request("/users/all/total"),
     getById: (id) => request(`/user/${id}`),
-    addVehicle: (usuarioId, plate) => request(`/usuarios/${usuarioId}/vehicles/${plate}`, { method: "POST" }),
-    getUsersByVehicle: (matricula) => request(`/vehiculos/${matricula}/usuarios`),
+    addVehicle: (usuarioId, plate) => request(`/vehicle/${plate}/add-user/${usuarioId}`, { method: "POST" }),
+    getUsersByVehicle: (matricula) => request(`/vehicle/${matricula}/users`),
   },
   user: {
     create: (data) => request("/user/new", { method: "POST", body: data }),
