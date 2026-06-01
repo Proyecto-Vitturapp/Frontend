@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui";
+import { Card, CardContent } from "../components/ui";
 import { CarFront, Users, Wrench, Pencil, ClipboardClock } from "lucide-react";
 import { api } from "../services/api";
 import { useApiCache } from "../hooks/useApiCache";
@@ -177,17 +177,6 @@ export default function Home() {
           </Card>
         ))}
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Sin uso</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-secondary-500 text-sm">
-            Sin uso todavía
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }
