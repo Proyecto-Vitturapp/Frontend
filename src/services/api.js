@@ -1,8 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const API_SECRET_KEY = import.meta.env.VITE_API_SECRET_KEY || "";
+const baseUrl = "/api";
 
 async function request(endpoint, options = {}) {
-  const baseUrl = API_URL.replace(/\/+$/, "");
   const url = `${baseUrl}${endpoint}`;
   const token = localStorage.getItem("token");
 
