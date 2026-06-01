@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../components/ui'
 import { api } from '../services/api'
-import { Card, CardContent, CardHeader, CardTitle, Badge, Button, ErrorScreen } from '../components/ui'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button, ErrorScreen, Input } from '../components/ui'
 import { Undo2, Plus, Pencil } from 'lucide-react'
 import { useApiCache } from '../hooks/useApiCache'
 
@@ -19,6 +19,8 @@ export default function VehicleDetails() {
   const [vehicleUsers, setVehicleUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [authorized, setAuthorized] = useState(false)
+  const [newUserId, setNewUserId] = useState('')
+  const [addingUser, setAddingUser] = useState(false)
 
   const { data: userVehicles } = useApiCache(
     `vehicles-user-${user?.id}`,
@@ -77,6 +79,22 @@ export default function VehicleDetails() {
     }
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [isMechanic, userVehicles, plate, loadData, authorized])
+
+  const handleAddUser = async () => {
+    if (!newUserId.trim()) return
+    setAddingUser(true)
+    try {
+      await api.users.addVehicle(newUserId.trim(), plate)
+      addToast('Usuario añadido correctamente', 'success')
+      setNewUserId('')
+      const usersData = await api.users.getUsersByVehicle(plate)
+      setVehicleUsers(Array.isArray(usersData) ? usersData : [])
+    } catch {
+      addToast('Error al añadir el usuario', 'error')
+    } finally {
+      setAddingUser(false)
+    }
+  }
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('es-ES', {
@@ -190,6 +208,24 @@ export default function VehicleDetails() {
                     : vehicleUsers.map((u) => `${u.name} ${u.first_last_name || ''} ${u.second_last_name || ''}`.trim()).join(', ')}
                 </dd>
               </div>
+              {isMechanic && (
+                <div>
+                  <dt className="text-sm text-secondary-500 mb-2">Añadir usuario</dt>
+                  <dd className="flex gap-2">
+                    <Input
+                      type="text"
+                      placeholder="ID del usuario"
+                      value={newUserId}
+                      onChange={(e) => setNewUserId(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleAddUser()}
+                      className="flex-1"
+                    />
+                    <Button onClick={handleAddUser} disabled={addingUser || !newUserId.trim()}>
+                      {addingUser ? 'Añadiendo...' : 'Añadir'}
+                    </Button>
+                  </dd>
+                </div>
+              )}
             </dl>
           </CardContent>
         </Card>
