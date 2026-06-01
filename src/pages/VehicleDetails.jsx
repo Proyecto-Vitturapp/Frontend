@@ -34,6 +34,7 @@ export default function VehicleDetails() {
         api.users.getUsersByVehicle(plate),
       ])
       const reviews = Array.isArray(revisionesData) ? revisionesData : revisionesData ? [revisionesData] : []
+      reviews.sort((a, b) => new Date(b.review_dateCalled || b.review_date || 0) - new Date(a.review_dateCalled || a.review_date || 0))
       setVehicle(vehicleData)
       setReviews(reviews)
       setVehicleUsers(Array.isArray(usersData) ? usersData : [])
